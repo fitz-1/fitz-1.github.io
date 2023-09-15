@@ -61,7 +61,7 @@ html, body {
     padding: 1%;
   }
   
-  main, header, nav, article, aside, footer, section {
+  main, header, article, aside, footer, section {
     background-color: rgb(100, 218, 250);
     padding: 1%;
   }
@@ -78,11 +78,13 @@ html, body {
   }
   
   nav {
+    background-color:rgb(237, 237, 247);
     height: 50px;
     flex: 100%;
     display: flex;
   }
   
+
   nav ul {
     padding: 0;
     list-style-type: none;
@@ -101,6 +103,7 @@ html, body {
     font-size: 2rem;
     height: 3rem;
     line-height: 1.7;
+    font-weight: bold;
     text-transform: uppercase;
     text-decoration: none;
     color: black;
