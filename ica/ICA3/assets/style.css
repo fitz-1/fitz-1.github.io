@@ -19,7 +19,7 @@ body {
 /* || typography */
 
 h1, h2, h3 {
-  font-family: 'Cinzel Decorative', cursive;
+  font-family: 'Times New Roman';
   color: #2a2a2a;
 }
 
@@ -31,7 +31,6 @@ p, input, li {
 h1 {
   font-size: 4rem;
   text-align: center;
-  text-shadow: 2px 2px 10px black;
 }
 
 h2 {
