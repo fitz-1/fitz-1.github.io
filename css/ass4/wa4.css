@@ -7,7 +7,7 @@
   html {
     font-family: 'Helvetica neue', Arial, 'sans serif';
     font-size: 10px;
-    background-color: lavender;
+    background-color: rgb(196, 196, 254);
   }
   
   /* Selectors to be matched up with rulesets */
