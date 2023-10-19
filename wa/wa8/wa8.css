@@ -4,6 +4,11 @@ body{
     align-items: center;
     background-color: #a260b7;
 }
+
+h1{
+    color: #ff8e48;
+}
+
 nav{
     height: 50vh;
     display:flex;
@@ -22,9 +27,6 @@ nav a{
 nav a:hover {
     background-color: #ebacc9;
     color: #ff6201;
-    body {
-        background-color: #ff6201;
-    }
 }
 
 img{
@@ -63,18 +65,16 @@ img{
 .disco-ball{
     height: 100px;
     width: 100px;
-    padding: 1rem;
-    transition: width 2s, height 2s, padding 2s;
+    transition: width 2s, height 2s;
 }
 
 .disco-ball:hover{
     height: 300px;
     width: 300px;
-    padding: 3rem;
 }
 
 #red-ball{
-    background-color: lavender;
+    background-color:#ff8e48;
     outline: 1px solid black;
     width: 20px;
     height:20px;
