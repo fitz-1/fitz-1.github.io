@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./ica9.css">
+</head>
+<body>
+    <div id="one"></div>
+    <div id="two"></div>
+    <div id="three"></div>
+    <div id="four"></div>
+    <button type="button" id="player">Fun button!</button>
+    <button type="button" id="press">Other fun button!</button>
+
+
+    <script>
+        const body = document.querySelector("body");
+        const button = document.querySelector("#player");
+        const press = document.querySelector("#press");
+        const one = document.getElementById("one");
+        const two = document.getElementById("two");
+        const three = document.getElementById("three");
+        const four = document.getElementById("four");
+
+        button.addEventListener("click", buttonColors);
+        press.addEventListener("click", pressFXN);
+
+        function buttonColors() {
+            button.innerHTML = `<h1>Wow this button is fun!</h1>`;
+            button.style.backgroundColor = 'lavender';
+            body.style.backgroundColor = 'red';
+            press.innerHTML = `<h1>Yeah it is!</h1>`;
+            press.style.backgroundColor = 'black';
+            press.style.color = 'white';
+        }
+        function pressFXN() {
+            press.style.backgroundColor = 'orange';
+            button.style.right = "50px";
+            four.appendChild(press);
+            press.innerHTML = `<h1>I moved!</h1>`;
+        }
+
+    </script>
+</body>
+</html>
