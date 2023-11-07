@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>Silly story generator</title>
+
+    <link rel="stylesheet" href="./wa10.css">
+  </head>
+
+  <body>
+    <div>
+      <label for="customname">Enter custom name:</label>
+      <input id="customname" type="text" placeholder="">
+    </div>
+    <div>
+      <label for="us">US</label
+      ><input id="us" type="radio" name="ukus" value="us" checked />
+      <label for="uk">UK</label
+      ><input id="uk" type="radio" name="ukus" value="uk" />
+    </div>
+    <div>
+      <button class="randomize">Generate random story</button>
+    </div>
+    <!-- Thanks a lot to Willy Aguirre for his help with the code for this assessment -->
+    <p class="story"></p>
+
+    <script>
+        const customName = document.getElementById('customname');
+        const randomize = document.querySelector('.randomize');
+        const story = document.querySelector('.story');
+
+        var storyText = "It was 94 fahrenheit outside, so :insertx: went to play outside. When they got to :inserty:, they stared eating some trail mix, then :insertz:. Bob saw the whole thing, but was not surprised — :insertx: weighs 300 pounds, and it was a hot day.";
+        const insertX = ["Willy the Goblin", "Big Daddy", "Father Christmas"]
+        const insertY = ["the bike park", "Bear Peak", "Copper Mountain"]
+        const insertZ = ["did a backflip", "started playing some hack sack", "drank some water"]
+
+        function randomValueFromArray(array){
+            const random = Math.floor(Math.random()*array.length);
+            return array[random];
+        }
+
+        randomize.addEventListener('click', result);
+
+        function result() {
+            var newStory = storyText;
+            const xitem = randomValueFromArray(insertX);
+            const yitem = randomValueFromArray(insertY);
+            const zitem = randomValueFromArray(insertZ);
+            var weight = 300;
+            var temperature = 94;
+
+            newStory = newStory.replace(':insertx:', xitem);
+            newStory = newStory.replace(':inserty:', yitem);
+            newStory = newStory.replace(':insertz:', zitem);
+            newStory = newStory.replace(':insertx:', xitem);
+            
+
+            if(customName.value !== '') {
+                const name = customName.value;
+                newStory = newStory.replace('Bob', name);
+            }
+            if(document.getElementById("uk").checked) {
+                weight = Math.round(weight/14);
+                console.log(weight);
+                temperature =  Math.round(((temperature-32)*5)/9);
+                console.log(temperature);
+                newStory = newStory.replace('94 fahrenheit', temperature + " centigrade");
+                newStory = newStory.replace('300 pounds', weight + " stone");
+            }
+            story.textContent = newStory;
+            story.style.visibility = 'visible';
+            console.log(newStory);
+        }
+    </script>
+  </body>
+</html>
