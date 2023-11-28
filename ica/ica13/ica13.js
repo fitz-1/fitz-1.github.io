@@ -6,6 +6,9 @@ const ctx = canvas.getContext('2d');
 const width = (canvas.width = window.innerWidth);
 const height = (canvas.height = window.innerHeight);
 
+//keeps track of how many times object has been drawn to alternate shape
+var counter = 0;
+
 // function to generate random number
 
 function random(min, max) {
@@ -19,19 +22,43 @@ function randomRGB() {
   return `rgb(${random(0, 255)},${random(0, 255)},${random(0, 255)})`;
 }
 
+function makeCircle(size) {
+    ctx.beginPath();
+    ctx.fillStyle = this.color;
+    ctx.arc(this.x, this.y, size, 0, 2 * Math.PI);
+    ctx.fill();
+}
+
+function makeSquare(size) {
+    ctx.beginPath();
+    ctx.fillStyle = this.color;
+    ctx.rect(this.x, this.y, size, size);
+    ctx.fill();
+}
+var circleSize = random(1,50);
+var squareSize = random(1,50);
+
+
 class Ball {
-    constructor(x, y, velX, velY, color, size) {
+    constructor(x, y, velX, velY, color, size, shape) {
       this.x = x;
       this.y = y;
       this.velX = velX;
       this.velY = velY;
       this.color = color;
       this.size = size;
+      this.shape = shape;
     }
-    draw() {
+    drawCircle() {
         ctx.beginPath();
         ctx.fillStyle = this.color;
-        ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+        ctx.arc(this.x, this.y, circleSize, 0, 2 * Math.PI);
+        ctx.fill();
+    }
+    drawSquare() {
+        ctx.beginPath();
+        ctx.fillStyle = this.color;
+        ctx.rect(this.x, this.y, squareSize, squareSize);
         ctx.fill();
     }
     update() {
@@ -64,6 +91,18 @@ class Ball {
             if (distance < this.size + ball.size) {
               ball.color = this.color = randomRGB();
               ball.size = this.size = random(2,100);
+              ball.velY = this.velY = this.velY + 0.01;
+              if(ball.shape == "circle") {
+                console.log("in circle collision");
+                squareSize = random(1,50);
+                ball.drawSquare();
+                ball.shape = this.shape = "square";
+              } else if(ball.shape == "square") {
+                console.log("in square collision");
+                circleSize = random(1,50);
+                ball.drawCircle();
+                ball.shape = this.shape = "circle";
+              }
             }
           }
         }
@@ -71,8 +110,9 @@ class Ball {
 }
 
 const balls = [];
+const shapeOptions = ["circle", "square"];
 
-while (balls.length < 25) {
+while (balls.length < 10) {
   const size = random(10, 20);
   const ball = new Ball(
     // ball position always drawn at least one ball width
@@ -83,6 +123,7 @@ while (balls.length < 25) {
     random(-7, 7),
     randomRGB(),
     size,
+    shapeOptions[random(0,1)],
   );
 
   balls.push(ball);
@@ -93,7 +134,12 @@ function loop() {
     ctx.fillRect(0, 0, width, height);
   
     for (const ball of balls) {
-      ball.draw();
+        if(ball.shape == "circle") {
+            ball.drawCircle();
+        } else {
+            ball.drawSquare();
+        }
+      counter += 1;
       ball.update();
       ball.collisionDetect();
     }
