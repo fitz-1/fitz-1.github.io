@@ -1,0 +1,31 @@
+body {
+    background-color: lavender;
+}
+
+#employeeTable, tr, td, th {
+    border: 1px solid black;
+    text-align: center;
+    border-collapse: collapse;
+    padding: 5px;
+}
+
+th {
+    width: 10vw;
+    background-color: purple;
+    color: #D8BCAB;
+}
+
+td {
+    background-color: rgb(175, 175, 255);
+    color: white;
+}
+
+.mainContent{
+    display: flex;
+    justify-content: center;
+}
+
+#employees {
+    display: flex;
+    justify-content: center;
+}
