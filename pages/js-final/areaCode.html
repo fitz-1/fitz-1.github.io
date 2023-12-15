@@ -1,26 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Area Code Entry</title>
-    <link rel="stylesheet" href="./js.css">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Area Code Entry</title>
+        <link rel="stylesheet" href="./js.css">
+        <link rel="stylesheet" href="./areaCode.css">
+    </head>
 
-<body>
-    <h1>Enter your phone number using the below links!</h1>
-    <nav>
-        <ul>
-          <li>
-            <a href="./areaCode.html">Area Code</a>
-          </li>
-          <li>
-            <a href="./first3.html">First 3 Digits</a>
-          </li>
-          <li>
-            <a href="./last4.html">Last 4 Digits</a>
-          </li>
-        </ul>
-      </nav>
-</body>
+    <body>
+        <h1>Enter your phone number using the below links!</h1>
+        <nav>
+            <ul>
+                <li>
+                    <a href="./js.html">Home</a>
+                </li>
+                <li>
+                    <a href="./areaCode.html">Area Code</a>
+                </li>
+                <li>
+                    <a href="./first3.html">First 3 Digits</a>
+                </li>
+                <li>
+                    <a href="./last4.html">Last 4 Digits</a>
+                </li>
+            </ul>
+        </nav>
+        <h1>Enter Your Area Code Below:</h1>
+        <main>
+            <div class="input-container">
+                <div class="input-box">
+                    <button class="shuffle-btn" onclick="shuffle(1)">Shuffle</button>
+                    <div id="display1" class="display">0</div>
+                    <button class="lock-btn" id="lockBtn1"
+                        onclick="toggleLock(1)"><img class="lockIMG"
+                            src="../../img/unlock.png" alt="Unlock"></button>
+                </div>
+                <div class="input-box">
+                    <button class="shuffle-btn" onclick="shuffle(2)">Shuffle</button>
+                    <div id="display2" class="display">0</div>
+                    <button class="lock-btn" id="lockBtn2"
+                        onclick="toggleLock(2)"><img class="lockIMG"
+                            src="../../img/unlock.png" alt="Unlock"></button>
+                </div>
+                <div class="input-box">
+                    <button class="shuffle-btn" onclick="shuffle(3)">Shuffle</button>
+                    <div id="display3" class="display">0</div>
+                    <button class="lock-btn" id="lockBtn3"
+                        onclick="toggleLock(3)"><img class="lockIMG"
+                            src="../../img/unlock.png" alt="Unlock"></button>
+                </div>
+            </div>
+            <button class="shuffle-all-btn" onclick="shuffleAll()">Shuffle All</button>
+            <button class="submit-btn" onclick="submitForm()">Submit</button>
+        </main>
+        <script src="./areaCode.js"></script>
+    </body>
 </html>

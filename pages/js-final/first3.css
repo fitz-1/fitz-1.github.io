@@ -1,0 +1,51 @@
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.selected-numbers {
+    margin-bottom: 20px;
+}
+
+.bouncing-dots {
+    display: flex;
+}
+
+.dot {
+    width: 30px;
+    height: 30px;
+    background-color: #3498db;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.submit-btn {
+    margin-top: 20px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#selectedNumbersSection {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-family: Arial;
+    font-size: 18px;
+  }
+  
+  #submitButton {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }

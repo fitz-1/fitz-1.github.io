@@ -5,22 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Last 4 Digits</title>
     <link rel="stylesheet" href="./js.css">
+    <link rel="stylesheet" href="./last4.css">
 </head>
 
 <body>
     <h1>Enter your phone number using the below links!</h1>
-    <nav>
-        <ul>
-          <li>
-            <a href="./areaCode.html">Area Code</a>
-          </li>
-          <li>
-            <a href="./first3.html">First 3 Digits</a>
-          </li>
-          <li>
-            <a href="./last4.html">Last 4 Digits</a>
-          </li>
-        </ul>
-      </nav>
+        <nav>
+            <ul>
+                <li>
+                    <a href="./js.html">Home</a>
+                </li>
+                <li>
+                    <a href="./areaCode.html">Area Code</a>
+                </li>
+                <li>
+                    <a href="./first3.html">First 3 Digits</a>
+                </li>
+                <li>
+                    <a href="./last4.html">Last 4 Digits</a>
+                </li>
+            </ul>
+        </nav>
+
+        <div id="sliderContainer">
+            <input type="range" id="numberSlider" min="0" max="9999" step="1" value="0">
+            <div id="currentNumberDisplay">0000</div>
+            <button id="submitNumber">Submit</button>
+        </div>
+
+        <script src="last4.js"></script>
 </body>
 </html>

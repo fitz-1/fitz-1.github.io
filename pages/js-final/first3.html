@@ -1,26 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>First 3 Digits</title>
-    <link rel="stylesheet" href="./js.css">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>First 3 Digits</title>
+        <link rel="stylesheet" href="./js.css">
+        <link rel="stylesheet" href="./first3.css">
+    </head>
 
-<body>
-    <h1>Enter your phone number using the below links!</h1>
-    <nav>
-        <ul>
-          <li>
-            <a href="./areaCode.html">Area Code</a>
-          </li>
-          <li>
-            <a href="./first3.html">First 3 Digits</a>
-          </li>
-          <li>
-            <a href="./last4.html">Last 4 Digits</a>
-          </li>
-        </ul>
-      </nav>
-</body>
+    <body>
+        <h1>Enter your phone number using the below links!</h1>
+        <nav>
+            <ul>
+                <li>
+                    <a href="./js.html">Home</a>
+                </li>
+                <li>
+                    <a href="./areaCode.html">Area Code</a>
+                </li>
+                <li>
+                    <a href="./first3.html">First 3 Digits</a>
+                </li>
+                <li>
+                    <a href="./last4.html">Last 4 Digits</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main>
+            <canvas id="phoneCanvas"></canvas>
+            <div id="selectedNumbersSection"></div>
+            <button id="submitButton">Submit</button>
+        </main>
+        <script src="./first3.js"></script>
+    </body>
 </html>

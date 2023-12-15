@@ -1,0 +1,24 @@
+#sliderContainer {
+    /* Center on page */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; 
+  }
+   /* make wide enough for granularity */
+  #numberSlider {
+    width: 90%;
+    margin-bottom: 20px;
+  }
+  
+  #currentNumberDisplay {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  #submitNumber {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
