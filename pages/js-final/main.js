@@ -8,6 +8,6 @@ function getLocalStorage() {
     var returnString =  "(" + areaCode + ") " + first3 + "-" + last4;
     console.log(returnString);
     var finalPhone = document.getElementById("finalPhone");
-    var finalReturn = "Your phone number is: " + returnString;
+    var finalReturn = "Your Phone Number is: " + returnString;
     finalPhone.innerHTML = finalReturn;
 }

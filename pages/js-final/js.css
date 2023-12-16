@@ -30,8 +30,8 @@ nav {
   }
 
   nav a:hover {
-    background-color: antiquewhite;
-    color: black;
+    background-color: grey;
+    /* color: black; */
   }
 
   h1 {

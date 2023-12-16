@@ -52,6 +52,7 @@ function submitForm() {
     console.log("area code: ", areaCode);
     localStorage.setItem("areaCode", areaCode);
     console.log("local storage content: ", localStorage.getItem("areaCode"));
+    alert(`Selected Number: ${areaCode}`);
 }
 
 

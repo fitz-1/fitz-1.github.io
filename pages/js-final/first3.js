@@ -44,8 +44,7 @@ class Ball {
     this.color = color;
     this.size = size;
     this.label = label;
-
-    // Add click event listener to each ball during construction
+    // Add click event listener to each ball
     this.addClickListener();
   }
 
@@ -94,8 +93,8 @@ class Ball {
       this.velY = -this.velY;
     }
 
-    this.x += this.velX / 2; // Adjust the speed
-    this.y += this.velY / 2; // Adjust the speed
+    this.x += this.velX / 2; // Adjust speed
+    this.y += this.velY / 2; // Adjust speed
   }
 
   collisionDetect() {
@@ -117,7 +116,7 @@ class Ball {
 const balls = [];
 const labels = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "!"];
 
-while (balls.length < 10) {
+while (balls.length < 11) {
   const size = random(30, 40); // Larger ball size
   const label = labels.pop();
   const ball = new Ball(
@@ -142,6 +141,7 @@ submitButton.addEventListener("click", () => {
     alert('You need to select more numbers silly!');
   } else {
     const selectedNumberList = selectedNumbers.join('');
+    alert(`Selected Number: ${selectedNumberList}`);
     console.log("selected nums list: ", selectedNumberList);
     localStorage.setItem("first3", selectedNumberList);
   }
