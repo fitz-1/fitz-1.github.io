@@ -1,0 +1,154 @@
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.overlay-logo {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  width: min(200px, 15vw);
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.overlay-content {
+  position: absolute;
+  right: 2rem;
+  top: 45%;
+  transform: translateY(-50%);
+  text-align: right;
+  color: white;
+}
+
+.overlay-text {
+  display: block;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  margin: 0.5rem 0;
+}
+
+.overlay-header {
+  font-size: 2.5rem;
+  font-weight: bold;
+  display: block;
+  white-space: nowrap;
+  margin-bottom: 0.5rem;
+}
+
+.overlay-subtext {
+  font-size: 1.5rem;
+  display: block;
+  white-space: nowrap;
+}
+
+.hero-text {
+  position: absolute;
+  bottom: 2rem;
+  left: .5rem;
+  color: white !important;
+  font-size: 1.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  z-index: 2;
+}
+
+#bg-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  filter: brightness(1.2);
+}
+
+@media (max-width: 768px) {
+  .overlay-content {
+    right: 1rem;
+    top: 30%;
+  }
+  
+  .overlay-header {
+    font-size: 2rem;
+  }
+  
+  .overlay-subtext {
+    font-size: 1rem;
+  }
+  
+  .overlay-logo {
+    width: min(150px, 20vw);
+    top: 1.5rem;
+    right: 1.5rem;
+  }
+  
+  .hero-text {
+    font-size: 1.2rem;
+    bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .overlay-content {
+    right: 1rem;
+    left: auto;
+    top: 20%;
+    text-align: right;
+  }
+  
+  .overlay-logo {
+    width: min(120px, 25vw);
+    top: 1rem;
+    right: 1rem;
+  }
+  
+  .overlay-header {
+    font-size: 1.5rem;
+  }
+  
+  .overlay-subtext {
+    font-size: 0.8rem;
+  }
+  
+  .hero-text {
+    font-size: 1rem;
+    bottom: 1rem;
+  }
+}
+
+/* iPhone-specific adjustments */
+@media (max-width: 414px) {
+  .overlay-content {
+    top: 20%;
+    right: 1rem;
+    left: auto;
+  }
+  
+  .overlay-header {
+    font-size: 1.2rem;
+  }
+
+  .overlay-subtext {
+    font-size: 0.6rem;
+  }
+
+  .overlay-logo {
+    width: 120px;
+  }
+  
+  .hero-text {
+    bottom: 10%;
+    font-size: 0.8rem;
+  }
+} 

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../resources/media/WhiteLogo_NoText.png">
+  <title>Final Design - Nova Tent Project</title>
+  <link rel="stylesheet" href="https://use.typekit.net/wee2inf.css">
+  <link rel="stylesheet" href="../resources/css/global.css" />
+  <link rel="stylesheet" href="../resources/css/navbar.css" />
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../resources/css/page-style.css" />
+  <link rel="stylesheet" href="../resources/css/gallery.css" />
+  <link rel="stylesheet" href="../resources/css/video-overlay.css" />
+  <style>
+    .emoji {
+        font-size: 2rem !important;
+        margin: 0;
+        padding: 0;
+        display: block;
+      }
+    .feature-section {
+      margin-bottom: 3rem;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    .feature-card {
+      background: #f8f9fa;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    .feature-image {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+    .feature-content {
+      padding: 2rem;
+      flex: 1;
+    }
+    .feature-content h3 {
+      color: #333;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+    .feature-content p {
+      color: #666;
+      line-height: 1.6;
+      font-size: 1.1rem;
+    }
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    .spec-card {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .spec-card h3 {
+      color: #333;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    .spec-card p {
+      color: #666;
+      font-size: 1.1rem;
+    }
+    .page-intro {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 0 1rem;
+    }
+    .page-intro p {
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+      color: #444;
+      font-size: 1.2rem;
+    }
+    .highlight-section {
+      margin: 3rem 0;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .highlight-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .highlight-item {
+      text-align: center;
+      padding: 1.5rem;
+    }
+    .highlight-item i {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+    .highlight-item h4 {
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    .highlight-item p {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    .highlight-item p.emoji {
+      font-size: 2rem !important;
+      color: inherit;
+      margin: 0;
+      padding: 0;
+      display: block;
+    }
+    @media (max-width: 768px) {
+      .feature-grid, .specs-grid {
+        grid-template-columns: 1fr;
+      }
+      .highlight-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .feature-image {
+        height: 250px;
+      }
+    }
+    .slideshow-controls button {
+      background: #333;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 1.5rem;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Pockets Section Styles */
+    .pockets-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    .pocket-card {
+      background: #f8f9fa;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    .pocket-image {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+    .pocket-content {
+      padding: 1.5rem;
+      flex: 1;
+    }
+    .pocket-content h3 {
+      color: #333;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    .pocket-content p {
+      color: #666;
+      line-height: 1.5;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .feature-grid, .pockets-grid {
+        grid-template-columns: 1fr;
+      }
+      .feature-image {
+        height: 250px;
+      }
+      .pocket-image {
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar Container -->
+  <header>
+    <div id="navbar-container"></div>
+  </header>
+
+  <!-- Hero Section with Video Background -->
+  <section class="hero">
+    <video autoplay muted loop id="bg-video">
+      <source src="../resources/media/videos/rainStarFar.webm" type="video/webm">
+      Your browser does not support HTML5 video.
+    </video>
+    <div class="video-overlay">
+      <img src="../resources/media/NovaLogoWhite1.png" alt="NOVA Tent Logo" class="overlay-logo">
+      <div class="overlay-content">
+        <span class="overlay-text overlay-header">Final Design</span>
+        <span class="overlay-text overlay-subtext">The culmination of our design journey.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Page Content -->
+  <main class="page-content">
+    <div class="container">
+      <h1>Final Design</h1>
+      
+      <div class="page-intro">
+        <p>
+          After four rounds of iteration, testing, and thoughtful refinement, the Nova Tent emerges as a versatile and innovative camping solution. Blending smart design and reliable performance, this final version strikes the ideal balance between functionality and aesthetics.
+        </p>
+      </div>
+
+      <div class="feature-section">
+        <h2>Key Features</h2>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <video autoplay muted loop class="pocket-image">
+              <source src="../resources/media/videos/rainStar.webm" type="video/webm">
+              Your browser does not support HTML5 video.
+            </video>
+            <div class="feature-content">
+              <h3>Integrated Lighting</h3>
+              <p>
+                The Nova Tent features a built-in, waterproof lighting system designed to elevate comfort, convenience, and atmosphere at camp. Durable, flexible, silicone-coated lights are seamlessly integrated into the tent's structure, providing soft ambient illumination without the need for extra gear. With multiple lighting modes—including a warm, relaxing glow and fun party settings—you can set the perfect vibe for any adventure. The system stays illuminated for up to five hours on a single charge, keeping your space bright whether you're winding down or lighting up the night. Designed for durability and fun, the Nova Tent makes every campsite experience brighter and better!
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <video autoplay muted loop class="pocket-image">
+              <source src="../resources/media/videos/self-building-tent.webm" type="video/webm">
+              Your browser does not support HTML5 video.
+            </video>
+            <div class="feature-content">
+              <h3>Easy Setup</h3>
+              <p>
+                The Nova Tent is designed for fast, stress-free setup so you can get to relaxing sooner. The lightweight poles easily snap together and lock into the feet at the base, while the clip system eliminates the hassle of sliding poles through fabric sleeves. The front brow pole slides smoothly into a custom connection point for added stability. With integrated lighting already in place, there's no extra assembly required inside the tent. When it's time to pack up, the spacious storage bag makes it easy to repack without the struggle—keeping everything compact without being bulky. Whether you're setting up camp or heading out, the Nova Tent keeps things simple and efficient.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-section">
+        <h2>Smart Storage Pockets</h2>
+        <div class="pockets-grid">
+          <div class="pocket-card">
+            <video autoplay muted loop class="pocket-image">
+              <source src="../resources/media/final/gear_shelf.webm" type="video/webm">
+              Your browser does not support HTML5 video.
+            </video>
+            <div class="pocket-content">
+              <h3>Gear Shelf</h3>
+              <p>
+                A spacious overhead shelf perfect for storing larger items like headlamps, books, or extra clothing.
+                Keeps your gear organized and within easy reach.
+              </p>
+            </div>
+          </div>
+
+          <div class="pocket-card">
+            <video autoplay muted loop class="pocket-image">
+              <source src="../resources/media/final/phonePocket.webm" type="video/webm">
+              Your browser does not support HTML5 video.
+            </video>
+            <div class="pocket-content">
+              <h3>Phone Pockets</h3>
+              <p>
+                Strategically placed mesh pockets designed to hold your phone securely while keeping it accessible.
+                Perfect for charging or quick access to your device.
+              </p>
+            </div>
+          </div>
+
+          <div class="pocket-card">
+            <video autoplay muted loop class="pocket-image" playsinline>
+              <source src="../resources/media/final/back_pockets.MOV" type="video/quicktime">
+              <source src="../resources/media/final/back_pockets.MOV" type="video/mp4">
+              Your browser does not support HTML5 video.
+            </video>
+            <div class="pocket-content">
+              <h3>Back Pockets</h3>
+              <p>
+                Deep, secure pockets along the back wall for storing valuables and personal items.
+                Keeps your belongings safe and out of the way.
+              </p>
+            </div>
+          </div>
+
+          <div class="pocket-card">
+            <video autoplay muted loop class="pocket-image" playsinline>
+              <source src="../resources/media/final/long_pockets.webm" type="video/webm">
+              Your browser does not support HTML5 video.
+            </video>
+            <div class="pocket-content">
+              <h3>Long Pockets</h3>
+              <p>
+                Longer pockets perfect for storing longer items like trekking poles, water bottles,
+                or rolled-up clothing. Maximizes space utilization in the front of the tent.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-section">
+        <h2>Product Video</h2>
+        <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; margin: 2rem 0;">
+          <iframe 
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+            src="https://www.youtube.com/embed/WPkMUU9tUqk" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+
+      <div class="specs-grid">
+        <div class="spec-card">
+          <h3>Dimensions</h3>
+          <p>7.6' x 4.375' x 4.25'</p>
+          <p>Sleeps 2 people comfortably</p>
+        </div>
+        <div class="spec-card">
+          <h3>Weight</h3>
+          <p>5.5 lbs</p>
+          <p>Lightweight and breathable</p>
+        </div>
+        <div class="spec-card">
+          <h3>Weather Rating</h3>
+          <p>3-Season</p>
+          <p>Water resistant capabilities</p>
+        </div>
+      </div>
+
+      <div class="highlight-section">
+        <h2>Design Highlights</h2>
+        <div class="highlight-grid">
+          <div class="highlight-item">
+            <p class="emoji">🏕️</p>
+            <h4>Quick Setup</h4>
+            <p>Sets up in under 5 minutes</p>
+          </div>
+          <div class="highlight-item">
+            <p class="emoji">🌟</p>
+            <h4>Integrated Lighting</h4>
+            <p>Lighting system integrated into overhead seams</p>
+          </div>
+          <div class="highlight-item">
+            <p class="emoji">🌬️</p>
+            <h4>Ventilation</h4>
+            <p>Optimized airflow design with massive windows</p>
+          </div>
+          <div class="highlight-item">
+            <p class="emoji">🎒</p>
+            <h4>Portability</h4>
+            <p>Compact and lightweight</p>
+          </div>
+        </div>
+      </div>
+
+      
+
+      <!-- Gallery Section -->
+      <div class="gallery-section">
+        <h2>Gallery</h2>
+        <div class="slideshow-wrapper">
+          <button onclick="prevSlide()" class="slideshow-controls">←</button>
+          <div class="slideshow-container">
+            <img src="../resources/media/final/farOut.JPG" alt="Nova Tent from a distance" class="slide active">
+            <div class="slide-caption active">Nova Tent from a distance</div>
+            <img src="../resources/media/final/closer.JPG" alt="Nova Tent closer view" class="slide">
+            <div class="slide-caption">Nova Tent closer view</div>
+            <img src="../resources/media/final/leftSide.JPG" alt="Nova Tent left side" class="slide">
+            <div class="slide-caption">Nova Tent left side</div>
+            <img src="../resources/media/final/rightSide.JPG" alt="Nova Tent right side" class="slide">
+            <div class="slide-caption">Nova Tent right side</div>
+            <img src="../resources/media/final/inside.JPG" alt="Nova Tent interior view" class="slide">
+            <div class="slide-caption">Nova Tent interior view</div>
+            <img src="../resources/media/final/inside2.JPG" alt="Nova Tent interior view 2" class="slide">
+            <div class="slide-caption">Nova Tent interior view 2</div>
+            <img src="../resources/media/final/doorOpen.JPG" alt="Nova Tent with door open" class="slide">
+            <div class="slide-caption">Nova Tent with door open</div>
+            <img src="../resources/media/final/bagFlatties.JPG" alt="Nova Tent packed in bag" class="slide">
+            <div class="slide-caption">Nova Tent packed in bag</div>
+            <img src="../resources/media/final/bagGrass.JPG" alt="Nova Tent bag on grass" class="slide">
+            <div class="slide-caption">Nova Tent bag on grass</div>
+            <img src="../resources/media/final/bagLeftFlatties.JPG" alt="Nova Tent bag left view" class="slide">
+            <div class="slide-caption">Nova Tent bag left view</div>
+            <img src="../resources/media/final/bagGround.JPG" alt="Nova Tent bag on ground" class="slide">
+            <div class="slide-caption">Nova Tent bag on ground</div>
+            <img src="../resources/media/final/everythingGround.JPG" alt="Nova Tent components" class="slide">
+            <div class="slide-caption">Nova Tent components</div>
+            <img src="../resources/media/final/fabricSwatch.JPG" alt="Nova Tent fabric swatch" class="slide">
+            <div class="slide-caption">Nova Tent fabric swatch</div>
+            <video class="slide" controls>
+              <source src="../resources/media/final/pole_video.MOV" type="video/quicktime">
+              Your browser does not support HTML5 video.
+            </video>
+            <div class="slide-caption">Pole assembly demonstration</div>
+          </div>
+          <button onclick="nextSlide()" class="slideshow-controls">→</button>
+        </div>
+        <div class="thumbnail-container" id="thumbnailContainer">
+          <!-- Thumbnails will be populated by JavaScript -->
+        </div>
+        <div class="thumbnail-pagination">
+          <button onclick="prevThumbnailPage()" id="prevThumbPage">Previous</button>
+          <span id="thumbnailPageInfo">Page 1 of 1</span>
+          <button onclick="nextThumbnailPage()" id="nextThumbPage">Next</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Nova Tent Project. All rights reserved.</p>
+  </footer>
+
+  <script src="../resources/js/loadNavbar.js"></script>
+  <script src="../resources/js/script.js"></script>
+  <script>
+    let currentSlide = 0;
+    let currentThumbnailPage = 0;
+    let autoScrollInterval;
+    const thumbnailsPerPage = 12;
+    const slides = document.querySelectorAll('.slide');
+    const captions = document.querySelectorAll('.slide-caption');
+    const thumbnailContainer = document.getElementById('thumbnailContainer');
+    const prevThumbPageBtn = document.getElementById('prevThumbPage');
+    const nextThumbPageBtn = document.getElementById('nextThumbPage');
+    const thumbnailPageInfo = document.getElementById('thumbnailPageInfo');
+
+    // Initialize the first slide and caption
+    slides[0].classList.add('active');
+    captions[0].classList.add('active');
+
+    function startAutoScroll() {
+      autoScrollInterval = setInterval(nextSlide, 5000);
+    }
+
+    function pauseAutoScroll() {
+      clearInterval(autoScrollInterval);
+      setTimeout(startAutoScroll, 15000);
+    }
+
+    // Create thumbnails
+    function createThumbnails() {
+      thumbnailContainer.innerHTML = '';
+      slides.forEach((slide, index) => {
+        const thumbnail = document.createElement('img');
+        thumbnail.src = slide.src;
+        thumbnail.alt = slide.alt;
+        thumbnail.className = 'thumbnail' + (index === currentSlide ? ' active' : '');
+        thumbnail.onclick = () => {
+          showSlide(index);
+          pauseAutoScroll();
+        };
+        thumbnailContainer.appendChild(thumbnail);
+      });
+      updateThumbnailPagination();
+    }
+
+    function updateThumbnailPagination() {
+      const totalPages = Math.ceil(slides.length / thumbnailsPerPage);
+      const startIndex = currentThumbnailPage * thumbnailsPerPage;
+      const endIndex = Math.min(startIndex + thumbnailsPerPage, slides.length);
+
+      // Show/hide thumbnails based on current page
+      const thumbnails = thumbnailContainer.querySelectorAll('.thumbnail');
+      thumbnails.forEach((thumb, index) => {
+        thumb.style.display = (index >= startIndex && index < endIndex) ? 'block' : 'none';
+      });
+
+      // Update pagination controls
+      prevThumbPageBtn.disabled = currentThumbnailPage === 0;
+      nextThumbPageBtn.disabled = currentThumbnailPage >= totalPages - 1;
+      thumbnailPageInfo.textContent = `Page ${currentThumbnailPage + 1} of ${totalPages}`;
+    }
+
+    function prevThumbnailPage() {
+      if (currentThumbnailPage > 0) {
+        currentThumbnailPage--;
+        updateThumbnailPagination();
+      }
+    }
+
+    function nextThumbnailPage() {
+      const totalPages = Math.ceil(slides.length / thumbnailsPerPage);
+      if (currentThumbnailPage < totalPages - 1) {
+        currentThumbnailPage++;
+        updateThumbnailPagination();
+      }
+    }
+
+    function showSlide(index) {
+      // Hide all slides and captions
+      slides.forEach(slide => slide.classList.remove('active'));
+      captions.forEach(caption => caption.classList.remove('active'));
+      
+      // Show the selected slide and caption
+      slides[index].classList.add('active');
+      captions[index].classList.add('active');
+      currentSlide = index;
+
+      // Update active thumbnail
+      const thumbnails = thumbnailContainer.querySelectorAll('.thumbnail');
+      thumbnails.forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === index);
+      });
+
+      // Update thumbnail page if needed
+      const newThumbnailPage = Math.floor(index / thumbnailsPerPage);
+      if (newThumbnailPage !== currentThumbnailPage) {
+        currentThumbnailPage = newThumbnailPage;
+        updateThumbnailPagination();
+      }
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showSlide(currentSlide);
+      pauseAutoScroll();
+    }
+
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      showSlide(currentSlide);
+      pauseAutoScroll();
+    }
+
+    // Initialize thumbnails and start auto-scrolling
+    createThumbnails();
+    startAutoScroll();
+  </script>
+</body>
+</html>
