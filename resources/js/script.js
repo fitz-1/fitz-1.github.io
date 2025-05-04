@@ -9,11 +9,16 @@ function optimizeVideosForMobile() {
   if (window.innerWidth <= 768) {
     const videos = document.querySelectorAll('video');
     videos.forEach(video => {
-      // Reduce video quality on mobile
-      video.setAttribute('poster', video.getAttribute('data-poster') || '');
-      
       // Add loading attribute
       video.setAttribute('loading', 'lazy');
+      
+      // Add preload="none" to prevent immediate loading
+      video.setAttribute('preload', 'none');
+      
+      // Add poster image if available
+      if (video.getAttribute('data-poster')) {
+        video.setAttribute('poster', video.getAttribute('data-poster'));
+      }
       
       // Add error handling
       video.addEventListener('error', function() {
@@ -24,6 +29,21 @@ function optimizeVideosForMobile() {
           video.style.display = 'none';
         }
       });
+
+      // Only play video when it's in viewport
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            video.play().catch(error => {
+              console.log('Video autoplay failed:', error);
+            });
+          } else {
+            video.pause();
+          }
+        });
+      }, { threshold: 0.5 });
+
+      observer.observe(video);
     });
   }
 }
