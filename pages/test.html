@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>Test Page</title>
+  <title>Memory Test</title>
   <style>
     body {
       font-family: system-ui, -apple-system, sans-serif;
@@ -33,15 +33,21 @@
       border-radius: 10px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
+    #memory {
+      margin-top: 20px;
+      padding: 10px;
+      background: #eee;
+      border-radius: 5px;
+      font-family: monospace;
+    }
   </style>
 </head>
 <body>
   <div id="debug">INITIALIZING...</div>
   
   <div class="content">
-    <h1>Test Page v2</h1>
-    <p>This is a minimal test page to verify basic functionality.</p>
-    <p>Current time: <span id="current-time"></span></p>
+    <h1>Memory Test</h1>
+    <div id="memory">Memory usage: --</div>
   </div>
 
   <script>
@@ -54,30 +60,38 @@
       }
     }
 
-    // Update time display
-    function updateTime() {
-      const timeElement = document.getElementById('current-time');
-      if (timeElement) {
-        timeElement.textContent = new Date().toISOString();
+    // Memory monitoring
+    function updateMemory() {
+      const memory = document.getElementById('memory');
+      if (memory && performance.memory) {
+        const used = Math.round(performance.memory.usedJSHeapSize / 1024 / 1024);
+        const total = Math.round(performance.memory.totalJSHeapSize / 1024 / 1024);
+        memory.textContent = `Memory usage: ${used}MB / ${total}MB`;
       }
     }
 
     // Initial message
-    debug('PAGE LOADED - ' + new Date().toISOString());
+    debug('PAGE LOADED');
 
     // Update every second
     let count = 0;
-    setInterval(() => {
+    const interval = setInterval(() => {
       count++;
-      updateTime();
-      debug(`RUNNING: ${count} seconds - ${new Date().toISOString()}`);
+      updateMemory();
+      debug(`RUNNING: ${count} seconds`);
+      
+      // Stop after 5 minutes
+      if (count >= 300) {
+        clearInterval(interval);
+        debug('TEST COMPLETE');
+      }
     }, 1000);
 
-    // Force reload after 30 seconds
-    setTimeout(() => {
-      debug('RELOADING PAGE...');
-      window.location.reload(true);
-    }, 30000);
+    // Log any errors
+    window.onerror = function(msg, url, line) {
+      debug(`ERROR: ${msg} at line ${line}`);
+      return false;
+    };
   </script>
 </body>
 </html> 
