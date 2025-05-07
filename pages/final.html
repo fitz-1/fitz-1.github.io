@@ -264,16 +264,6 @@
       .video-container {
         max-width: 100%;
       }
-      .video-container video {
-        display: none;
-      }
-      .video-container.playing video {
-        display: block;
-      }
-      .video-container.playing .static-image,
-      .video-container.playing .play-button {
-        display: none;
-      }
     }
   </style>
 </head>
@@ -316,9 +306,7 @@
         <div class="feature-grid">
           <div class="feature-card">
             <div class="video-container">
-              <video autoplay muted loop playsinline preload="none" data-poster="../resources/media/page-poster.JPG">
-                <source src="../resources/media/videos/rainStar-desktop.webm" media="(min-width:1024px)" type="video/webm">
-                <source src="../resources/media/videos/rainStar-tablet.webm" media="(min-width:768px)" type="video/webm">
+              <video autoplay muted loop playsinline>
                 <source src="../resources/media/videos/rainStar-mobile.webm" type="video/webm">
                 Your browser does not support HTML5 video.
               </video>
@@ -620,27 +608,12 @@
     }
 
     function showSlide(index) {
-      // Hide all slides and captions
       slides.forEach(slide => slide.classList.remove('active'));
       captions.forEach(caption => caption.classList.remove('active'));
       
-      // Show the selected slide and caption
       slides[index].classList.add('active');
       captions[index].classList.add('active');
       currentSlide = index;
-
-      // Update active thumbnail
-      const thumbnails = thumbnailContainer.querySelectorAll('.thumbnail');
-      thumbnails.forEach((thumb, i) => {
-        thumb.classList.toggle('active', i === index);
-      });
-
-      // Update thumbnail page if needed
-      const newThumbnailPage = Math.floor(index / thumbnailsPerPage);
-      if (newThumbnailPage !== currentThumbnailPage) {
-        currentThumbnailPage = newThumbnailPage;
-        updateThumbnailPagination();
-      }
     }
 
     function nextSlide() {
@@ -727,14 +700,13 @@
         const videoContainers = document.querySelectorAll('.video-container');
         
         videoContainers.forEach(container => {
-          const video = container.querySelector('video');
-          const sources = video.querySelectorAll('source');
-          const mobileSource = sources[sources.length - 1]; // Get mobile source
+          // Get the video source from the data attribute
+          const videoSrc = container.getAttribute('data-video-src');
           
           // Create static image
           const img = document.createElement('img');
           img.className = 'static-image';
-          img.src = mobileSource.src.replace('.webm', '.jpg').replace('videos/', 'thumbnails/');
+          img.src = videoSrc.replace('.webm', '.jpg').replace('videos/', 'thumbnails/');
           img.alt = 'Video thumbnail';
           
           // Create play button
@@ -751,23 +723,34 @@
             document.querySelectorAll('.video-container.playing').forEach(playingContainer => {
               if (playingContainer !== container) {
                 const playingVideo = playingContainer.querySelector('video');
-                playingVideo.pause();
+                if (playingVideo) {
+                  playingVideo.pause();
+                  playingVideo.remove();
+                }
                 playingContainer.classList.remove('playing');
               }
             });
             
-            // Play this video
-            if (!video.src) {
-              video.src = mobileSource.src;
-              video.load();
-            }
-            video.play();
+            // Create and play this video
+            const video = document.createElement('video');
+            video.autoplay = true;
+            video.muted = true;
+            video.loop = true;
+            video.playsInline = true;
+            
+            const source = document.createElement('source');
+            source.src = videoSrc;
+            source.type = 'video/webm';
+            
+            video.appendChild(source);
+            container.appendChild(video);
             container.classList.add('playing');
-          });
-          
-          // Handle video end
-          video.addEventListener('ended', function() {
-            container.classList.remove('playing');
+            
+            // Handle video end
+            video.addEventListener('ended', function() {
+              container.classList.remove('playing');
+              video.remove();
+            });
           });
         });
       }
