@@ -685,6 +685,16 @@
     document.addEventListener('DOMContentLoaded', function() {
       console.log('DOM Content Loaded - Starting video initialization');
       
+      // Initialize gallery first
+      try {
+        console.log('Initializing gallery');
+        createThumbnails();
+        startAutoScroll();
+        console.log('Gallery initialization complete');
+      } catch (error) {
+        console.error('Error initializing gallery:', error);
+      }
+
       // Function to check if element is in viewport
       function isInViewport(element) {
         try {
@@ -835,16 +845,6 @@
             console.error('Error setting up YouTube iframe:', error);
           }
         });
-      }
-
-      // Initialize thumbnails and start auto-scrolling
-      try {
-        console.log('Initializing gallery');
-        createThumbnails();
-        startAutoScroll();
-        console.log('Gallery initialization complete');
-      } catch (error) {
-        console.error('Error initializing gallery:', error);
       }
     });
   </script>
