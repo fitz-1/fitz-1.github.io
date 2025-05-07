@@ -679,6 +679,8 @@
             videoContainer.style.backgroundImage = `url(${video.getAttribute('data-poster')})`;
             videoContainer.style.backgroundSize = 'cover';
             videoContainer.style.backgroundPosition = 'center';
+            // Hide video initially
+            video.style.display = 'none';
           }
 
           // Get the appropriate source based on screen size
@@ -687,7 +689,6 @@
           
           if (sources.length === 0) {
             console.log('No video sources found, using poster image only');
-            video.style.display = 'none';
             return;
           }
 
@@ -736,6 +737,8 @@
             // Delay video loading slightly to prevent overwhelming the device
             setTimeout(() => {
               try {
+                // Show video before attempting to play
+                video.style.display = 'block';
                 const playPromise = video.play();
                 if (playPromise !== undefined) {
                   playPromise.catch((error) => {
@@ -753,7 +756,7 @@
                   video.style.display = 'none';
                 }
               }
-            }, 100);
+            }, 500); // Increased delay to 500ms
           }
         } catch (error) {
           console.error('Error in loadVideo function:', error);
@@ -774,14 +777,18 @@
         let index = 0;
         function processNextVideo() {
           if (index < videoContainers.length) {
-            console.log(`Checking video container ${index + 1}`);
+            console.log(`Processing video container ${index + 1} of ${videoContainers.length}`);
             const container = videoContainers[index];
             if (isInViewport(container)) {
               console.log(`Video container ${index + 1} is in viewport`);
               loadVideo(container);
+            } else {
+              console.log(`Video container ${index + 1} is not in viewport`);
             }
             index++;
-            setTimeout(processNextVideo, 200); // Add delay between video loads
+            setTimeout(processNextVideo, 1000); // Increased delay to 1 second
+          } else {
+            console.log('Finished processing all video containers');
           }
         }
         
@@ -792,11 +799,11 @@
       let scrollTimeout;
       window.addEventListener('scroll', function() {
         clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(checkVideos, 100);
+        scrollTimeout = setTimeout(checkVideos, 250); // Increased debounce time
       });
 
-      // Initial check with delay
-      setTimeout(checkVideos, 500);
+      // Initial check with longer delay
+      setTimeout(checkVideos, 1000); // Increased initial delay to 1 second
 
       // Handle YouTube video
       const youtubePlaceholder = document.querySelector('.youtube-placeholder');
