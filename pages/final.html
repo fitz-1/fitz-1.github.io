@@ -654,21 +654,43 @@
       
       // Function to check if element is in viewport
       function isInViewport(element) {
-        const rect = element.getBoundingClientRect();
-        return (
-          rect.top >= 0 &&
-          rect.left >= 0 &&
-          rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-        );
+        try {
+          const rect = element.getBoundingClientRect();
+          const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+          const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+          
+          // Consider an element in viewport if it's within 100px of the viewport
+          return (
+            rect.top >= -100 &&
+            rect.left >= -100 &&
+            rect.bottom <= windowHeight + 100 &&
+            rect.right <= windowWidth + 100
+          );
+        } catch (error) {
+          console.error('Error checking viewport:', error);
+          return false;
+        }
       }
 
       // Function to load video when in viewport
       function loadVideo(videoContainer) {
         console.log('Attempting to load video in container:', videoContainer);
+        
+        // Check if container is still in DOM
+        if (!document.body.contains(videoContainer)) {
+          console.log('Video container no longer in DOM, skipping');
+          return;
+        }
+
         const video = videoContainer.querySelector('video');
         if (!video) {
           console.log('No video element found in container');
+          return;
+        }
+
+        // If video is already loaded, skip
+        if (video.readyState >= 2) {
+          console.log('Video already loaded, skipping');
           return;
         }
 
@@ -756,7 +778,7 @@
                   video.style.display = 'none';
                 }
               }
-            }, 500); // Increased delay to 500ms
+            }, 500);
           }
         } catch (error) {
           console.error('Error in loadVideo function:', error);
@@ -766,6 +788,9 @@
           }
         }
       }
+
+      // Track which videos have been processed
+      const processedVideos = new Set();
 
       // Initial check for videos in viewport
       function checkVideos() {
@@ -777,10 +802,14 @@
         let index = 0;
         function processNextVideo() {
           if (index < videoContainers.length) {
-            console.log(`Processing video container ${index + 1} of ${videoContainers.length}`);
             const container = videoContainers[index];
-            if (isInViewport(container)) {
+            const containerId = container.id || `container-${index}`;
+            
+            console.log(`Processing video container ${index + 1} of ${videoContainers.length} (${containerId})`);
+            
+            if (!processedVideos.has(containerId) && isInViewport(container)) {
               console.log(`Video container ${index + 1} is in viewport`);
+              processedVideos.add(containerId);
               // Delay loading each video
               setTimeout(() => {
                 try {
@@ -790,10 +819,10 @@
                 }
               }, index * 1000); // Stagger video loading
             } else {
-              console.log(`Video container ${index + 1} is not in viewport`);
+              console.log(`Video container ${index + 1} is not in viewport or already processed`);
             }
             index++;
-            setTimeout(processNextVideo, 1000); // Increased delay to 1 second
+            setTimeout(processNextVideo, 1000);
           } else {
             console.log('Finished processing all video containers');
           }
@@ -806,11 +835,11 @@
       let scrollTimeout;
       window.addEventListener('scroll', function() {
         clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(checkVideos, 250); // Increased debounce time
+        scrollTimeout = setTimeout(checkVideos, 250);
       });
 
       // Initial check with longer delay
-      setTimeout(checkVideos, 1000); // Increased initial delay to 1 second
+      setTimeout(checkVideos, 2000); // Increased initial delay to 2 seconds
 
       // Handle YouTube video
       const youtubePlaceholder = document.querySelector('.youtube-placeholder');
