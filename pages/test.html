@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Test Page</title>
   <style>
     body {
@@ -36,8 +39,9 @@
   <div id="debug">INITIALIZING...</div>
   
   <div class="content">
-    <h1>Test Page</h1>
+    <h1>Test Page v2</h1>
     <p>This is a minimal test page to verify basic functionality.</p>
+    <p>Current time: <span id="current-time"></span></p>
   </div>
 
   <script>
@@ -50,15 +54,30 @@
       }
     }
 
+    // Update time display
+    function updateTime() {
+      const timeElement = document.getElementById('current-time');
+      if (timeElement) {
+        timeElement.textContent = new Date().toISOString();
+      }
+    }
+
     // Initial message
-    debug('PAGE LOADED');
+    debug('PAGE LOADED - ' + new Date().toISOString());
 
     // Update every second
     let count = 0;
     setInterval(() => {
       count++;
-      debug(`RUNNING: ${count} seconds`);
+      updateTime();
+      debug(`RUNNING: ${count} seconds - ${new Date().toISOString()}`);
     }, 1000);
+
+    // Force reload after 30 seconds
+    setTimeout(() => {
+      debug('RELOADING PAGE...');
+      window.location.reload(true);
+    }, 30000);
   </script>
 </body>
 </html> 
