@@ -202,6 +202,8 @@
       overflow: hidden;
       aspect-ratio: 16/9;
       position: relative;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
     }
 
     .video-container video {
@@ -266,9 +268,50 @@
         max-width: 100%;
       }
     }
+
+    /* Add loading state styles */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .loading-message {
+      text-align: center;
+      padding: 20px;
+      max-width: 80%;
+    }
+    .loading-button {
+      padding: 10px 20px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .video-container.loaded {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
+  <!-- Add loading overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-message">
+      <h2>Welcome to Nova Tent</h2>
+      <p>This page contains multiple videos and images. Click the button below to load the content.</p>
+      <button class="loading-button" id="loadContent">Load Content</button>
+    </div>
+  </div>
+
   <!-- Navigation Bar Container -->
   <header>
     <div id="navbar-container"></div>
@@ -536,6 +579,43 @@
   <script>
     console.log('Starting final.html initialization');
     
+    // Add loading state management
+    let contentLoaded = false;
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const loadContentButton = document.getElementById('loadContent');
+
+    // Function to initialize content
+    function initializeContent() {
+      console.log('Initializing content');
+      if (contentLoaded) return;
+      
+      // Hide loading overlay
+      loadingOverlay.style.display = 'none';
+      contentLoaded = true;
+
+      // Initialize gallery
+      try {
+        console.log('Initializing gallery');
+        createThumbnails();
+        startAutoScroll();
+        console.log('Gallery initialization complete');
+      } catch (error) {
+        console.error('Error initializing gallery:', error);
+      }
+
+      // Initialize videos after a delay
+      setTimeout(() => {
+        console.log('Starting video initialization');
+        checkVideos();
+      }, 2000);
+    }
+
+    // Add click handler for load content button
+    loadContentButton.addEventListener('click', function() {
+      console.log('Load content button clicked');
+      initializeContent();
+    });
+
     let currentSlide = 0;
     let currentThumbnailPage = 0;
     let autoScrollInterval;
@@ -650,238 +730,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('DOM Content Loaded - Starting video initialization');
-      
-      // Function to check if element is in viewport
-      function isInViewport(element) {
-        try {
-          const rect = element.getBoundingClientRect();
-          const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-          const windowWidth = window.innerWidth || document.documentElement.clientWidth;
-          
-          // Consider an element in viewport if it's within 100px of the viewport
-          return (
-            rect.top >= -100 &&
-            rect.left >= -100 &&
-            rect.bottom <= windowHeight + 100 &&
-            rect.right <= windowWidth + 100
-          );
-        } catch (error) {
-          console.error('Error checking viewport:', error);
-          return false;
-        }
-      }
-
-      // Function to load video when in viewport
-      function loadVideo(videoContainer) {
-        console.log('Attempting to load video in container:', videoContainer);
-        
-        // Check if container is still in DOM
-        if (!document.body.contains(videoContainer)) {
-          console.log('Video container no longer in DOM, skipping');
-          return;
-        }
-
-        const video = videoContainer.querySelector('video');
-        if (!video) {
-          console.log('No video element found in container');
-          return;
-        }
-
-        // If video is already loaded, skip
-        if (video.readyState >= 2) {
-          console.log('Video already loaded, skipping');
-          return;
-        }
-
-        try {
-          // First, set up the poster image as a fallback
-          if (video.getAttribute('data-poster')) {
-            console.log('Setting up poster image fallback');
-            videoContainer.style.backgroundImage = `url(${video.getAttribute('data-poster')})`;
-            videoContainer.style.backgroundSize = 'cover';
-            videoContainer.style.backgroundPosition = 'center';
-            // Hide video initially
-            video.style.display = 'none';
-          }
-
-          // Get the appropriate source based on screen size
-          const sources = video.querySelectorAll('source');
-          console.log('Found video sources:', sources.length);
-          
-          if (sources.length === 0) {
-            console.log('No video sources found, using poster image only');
-            return;
-          }
-
-          let selectedSource = sources[sources.length - 1]; // Default to mobile
-
-          if (window.innerWidth >= 1024) {
-            selectedSource = sources[0]; // Desktop
-            console.log('Using desktop video source');
-          } else if (window.innerWidth >= 768) {
-            selectedSource = sources[1]; // Tablet
-            console.log('Using tablet video source');
-          } else {
-            console.log('Using mobile video source');
-          }
-
-          // Set video attributes for mobile
-          console.log('Setting up video attributes');
-          video.setAttribute('playsinline', '');
-          video.setAttribute('webkit-playsinline', '');
-          video.setAttribute('muted', '');
-          video.setAttribute('preload', 'none');
-          
-          // Set poster image if available
-          if (video.getAttribute('data-poster')) {
-            video.setAttribute('poster', video.getAttribute('data-poster'));
-            console.log('Poster image set');
-          }
-
-          // Set source and load
-          console.log('Setting video source:', selectedSource.src);
-          video.src = selectedSource.src;
-
-          // Handle video errors
-          video.addEventListener('error', function(e) {
-            console.error('Video loading error:', e);
-            // Fallback to poster image if video fails to load
-            if (video.poster) {
-              console.log('Falling back to poster image');
-              video.style.display = 'none';
-            }
-          });
-
-          // Try to play video when in viewport
-          if (isInViewport(videoContainer)) {
-            console.log('Video in viewport, attempting to play');
-            // Delay video loading slightly to prevent overwhelming the device
-            setTimeout(() => {
-              try {
-                // Show video before attempting to play
-                video.style.display = 'block';
-                const playPromise = video.play();
-                if (playPromise !== undefined) {
-                  playPromise.catch((error) => {
-                    console.error('Video autoplay failed:', error);
-                    // If autoplay fails, show poster image
-                    if (video.poster) {
-                      console.log('Falling back to poster image after autoplay failure');
-                      video.style.display = 'none';
-                    }
-                  });
-                }
-              } catch (error) {
-                console.error('Error during video play attempt:', error);
-                if (video.poster) {
-                  video.style.display = 'none';
-                }
-              }
-            }, 500);
-          }
-        } catch (error) {
-          console.error('Error in loadVideo function:', error);
-          // Ensure we fall back to poster image on any error
-          if (video.poster) {
-            video.style.display = 'none';
-          }
-        }
-      }
-
-      // Track which videos have been processed
-      const processedVideos = new Set();
-
-      // Initial check for videos in viewport
-      function checkVideos() {
-        console.log('Checking videos in viewport');
-        const videoContainers = document.querySelectorAll('.video-container:not(.youtube-container)');
-        console.log('Found video containers:', videoContainers.length);
-        
-        // Process videos one at a time with a delay
-        let index = 0;
-        function processNextVideo() {
-          if (index < videoContainers.length) {
-            const container = videoContainers[index];
-            const containerId = container.id || `container-${index}`;
-            
-            console.log(`Processing video container ${index + 1} of ${videoContainers.length} (${containerId})`);
-            
-            if (!processedVideos.has(containerId) && isInViewport(container)) {
-              console.log(`Video container ${index + 1} is in viewport`);
-              processedVideos.add(containerId);
-              // Delay loading each video
-              setTimeout(() => {
-                try {
-                  loadVideo(container);
-                } catch (error) {
-                  console.error(`Error loading video ${index + 1}:`, error);
-                }
-              }, index * 1000); // Stagger video loading
-            } else {
-              console.log(`Video container ${index + 1} is not in viewport or already processed`);
-            }
-            index++;
-            setTimeout(processNextVideo, 1000);
-          } else {
-            console.log('Finished processing all video containers');
-          }
-        }
-        
-        processNextVideo();
-      }
-
-      // Check videos on scroll with debounce
-      let scrollTimeout;
-      window.addEventListener('scroll', function() {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(checkVideos, 250);
-      });
-
-      // Initial check with longer delay
-      setTimeout(checkVideos, 2000); // Increased initial delay to 2 seconds
-
-      // Handle YouTube video
-      const youtubePlaceholder = document.querySelector('.youtube-placeholder');
-      if (youtubePlaceholder) {
-        console.log('YouTube placeholder found, setting up click handler');
-        youtubePlaceholder.addEventListener('click', function() {
-          console.log('YouTube placeholder clicked');
-          try {
-            const container = this.parentElement;
-            const iframe = document.createElement('iframe');
-            iframe.style.position = 'absolute';
-            iframe.style.top = '0';
-            iframe.style.left = '0';
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-            iframe.src = 'https://www.youtube.com/embed/bYjO07ow-LM?autoplay=1';
-            iframe.frameBorder = '0';
-            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-            iframe.allowFullscreen = true;
-            
-            // Remove placeholder and add iframe
-            this.remove();
-            container.appendChild(iframe);
-            console.log('YouTube iframe added successfully');
-          } catch (error) {
-            console.error('Error setting up YouTube iframe:', error);
-          }
-        });
-      } else {
-        console.log('YouTube placeholder not found');
-      }
+      console.log('DOM Content Loaded - Basic initialization only');
+      // The rest of the initialization will happen after user interaction
     });
-
-    // Initialize thumbnails and start auto-scrolling
-    try {
-      console.log('Initializing gallery');
-      createThumbnails();
-      startAutoScroll();
-      console.log('Gallery initialization complete');
-    } catch (error) {
-      console.error('Error initializing gallery:', error);
-    }
   </script>
 </body>
 </html>
