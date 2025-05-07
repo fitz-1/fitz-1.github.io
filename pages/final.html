@@ -192,6 +192,22 @@
       font-size: 1rem;
     }
 
+    .video-container {
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto;
+      background: black;
+      border-radius: 8px;
+      overflow: hidden;
+      aspect-ratio: 9/16;
+    }
+
+    .video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
     @media (max-width: 768px) {
       .feature-grid, .pockets-grid {
         grid-template-columns: 1fr;
@@ -201,6 +217,9 @@
       }
       .pocket-image {
         height: 180px;
+      }
+      .video-container {
+        max-width: 100%;
       }
     }
   </style>
@@ -243,12 +262,14 @@
         <h2>Key Features</h2>
         <div class="feature-grid">
           <div class="feature-card">
-            <video autoplay muted loop playsinline preload="none" class="pocket-image" data-poster="../resources/media/page-poster.JPG">
-              <source src="../resources/media/videos/rainStar-desktop.webm" media="(min-width:1024px)" type="video/webm">
-              <source src="../resources/media/videos/rainStar-tablet.webm" media="(min-width:768px)" type="video/webm">
-              <source src="../resources/media/videos/rainStarFar-mobile.webm" type="video/webm">
-              Your browser does not support HTML5 video.
-            </video>
+            <div class="video-container">
+              <video autoplay muted loop playsinline preload="none" data-poster="../resources/media/page-poster.JPG">
+                <source src="../resources/media/videos/rainStar-desktop.webm" media="(min-width:1024px)" type="video/webm">
+                <source src="../resources/media/videos/rainStar-tablet.webm" media="(min-width:768px)" type="video/webm">
+                <source src="../resources/media/videos/rainStarFar-mobile.webm" type="video/webm">
+                Your browser does not support HTML5 video.
+              </video>
+            </div>
             <div class="feature-content">
               <h3>Integrated Lighting</h3>
               <p>
@@ -258,12 +279,14 @@
           </div>
 
           <div class="feature-card">
-            <video autoplay muted loop playsinline preload="none" class="pocket-image" data-poster="../resources/media/page-poster.JPG">
-              <source src="../resources/media/videos/self-building-tent-desktop.webm" media="(min-width:1024px)" type="video/webm">
-              <source src="../resources/media/videos/self-building-tent-tablet.webm" media="(min-width:768px)" type="video/webm">
-              <source src="../resources/media/videos/self-building-tent-mobile.webm" type="video/webm">
-              Your browser does not support HTML5 video.
-            </video>
+            <div class="video-container">
+              <video autoplay muted loop playsinline preload="none" data-poster="../resources/media/page-poster.JPG">
+                <source src="../resources/media/videos/self-building-tent-desktop.webm" media="(min-width:1024px)" type="video/webm">
+                <source src="../resources/media/videos/self-building-tent-tablet.webm" media="(min-width:768px)" type="video/webm">
+                <source src="../resources/media/videos/self-building-tent-mobile.webm" type="video/webm">
+                Your browser does not support HTML5 video.
+              </video>
+            </div>
             <div class="feature-content">
               <h3>Easy Setup</h3>
               <p>
@@ -278,12 +301,14 @@
         <h2>Smart Storage Pockets</h2>
         <div class="pockets-grid">
           <div class="pocket-card">
-            <video autoplay muted loop playsinline preload="none" class="pocket-image" data-poster="../resources/media/page-poster.JPG">
-              <source src="../resources/media/final/gear_shelf-desktop.webm" media="(min-width:1024px)" type="video/webm">
-              <source src="../resources/media/final/gear_shelf-tablet.webm" media="(min-width:768px)" type="video/webm">
-              <source src="../resources/media/final/gear_shelf-mobile.webm" type="video/webm">
-              Your browser does not support HTML5 video.
-            </video>
+            <div class="video-container">
+              <video autoplay muted loop playsinline preload="none" data-poster="../resources/media/page-poster.JPG">
+                <source src="../resources/media/final/gear_shelf-desktop.webm" media="(min-width:1024px)" type="video/webm">
+                <source src="../resources/media/final/gear_shelf-tablet.webm" media="(min-width:768px)" type="video/webm">
+                <source src="../resources/media/final/gear_shelf-mobile.webm" type="video/webm">
+                Your browser does not support HTML5 video.
+              </video>
+            </div>
             <div class="pocket-content">
               <h3>Gear Shelf</h3>
               <p>
@@ -294,12 +319,14 @@
           </div>
 
           <div class="pocket-card">
-            <video autoplay muted loop playsinline preload="none" class="pocket-image" data-poster="../resources/media/page-poster.JPG">
-              <source src="../resources/media/final/phonePocket-desktop.webm" media="(min-width:1024px)" type="video/webm">
-              <source src="../resources/media/final/phonePocket-tablet.webm" media="(min-width:768px)" type="video/webm">
-              <source src="../resources/media/final/phonePocket-mobile.webm" type="video/webm">
-              Your browser does not support HTML5 video.
-            </video>
+            <div class="video-container">
+              <video autoplay muted loop playsinline preload="none" data-poster="../resources/media/page-poster.JPG">
+                <source src="../resources/media/final/phonePocket-desktop.webm" media="(min-width:1024px)" type="video/webm">
+                <source src="../resources/media/final/phonePocket-tablet.webm" media="(min-width:768px)" type="video/webm">
+                <source src="../resources/media/final/phonePocket-mobile.webm" type="video/webm">
+                Your browser does not support HTML5 video.
+              </video>
+            </div>
             <div class="pocket-content">
               <h3>Phone Pockets</h3>
               <p>
@@ -310,12 +337,14 @@
           </div>
 
           <div class="pocket-card">
-            <video autoplay muted loop playsinline preload="none" class="pocket-image" data-poster="../resources/media/page-poster.JPG">
-              <source src="../resources/media/final/back_pockets-desktop.webm" media="(min-width:1024px)" type="video/webm">
-              <source src="../resources/media/final/back_pockets-tablet.webm" media="(min-width:768px)" type="video/webm">
-              <source src="../resources/media/final/back_pockets-mobile.webm" type="video/webm">
-              Your browser does not support HTML5 video.
-            </video>
+            <div class="video-container">
+              <video autoplay muted loop playsinline preload="none" data-poster="../resources/media/page-poster.JPG">
+                <source src="../resources/media/final/back_pockets-desktop.webm" media="(min-width:1024px)" type="video/webm">
+                <source src="../resources/media/final/back_pockets-tablet.webm" media="(min-width:768px)" type="video/webm">
+                <source src="../resources/media/final/back_pockets-mobile.webm" type="video/webm">
+                Your browser does not support HTML5 video.
+              </video>
+            </div>
             <div class="pocket-content">
               <h3>Back Pockets</h3>
               <p>
@@ -326,12 +355,14 @@
           </div>
 
           <div class="pocket-card">
-            <video autoplay muted loop playsinline preload="none" class="pocket-image" data-poster="../resources/media/page-poster.JPG">
-              <source src="../resources/media/final/long_pockets-desktop.webm" media="(min-width:1024px)" type="video/webm">
-              <source src="../resources/media/final/long_pockets-tablet.webm" media="(min-width:768px)" type="video/webm">
-              <source src="../resources/media/final/long_pockets-mobile.webm" type="video/webm">
-              Your browser does not support HTML5 video.
-            </video>
+            <div class="video-container">
+              <video autoplay muted loop playsinline preload="none" data-poster="../resources/media/page-poster.JPG">
+                <source src="../resources/media/final/long_pockets-desktop.webm" media="(min-width:1024px)" type="video/webm">
+                <source src="../resources/media/final/long_pockets-tablet.webm" media="(min-width:768px)" type="video/webm">
+                <source src="../resources/media/final/long_pockets-mobile.webm" type="video/webm">
+                Your browser does not support HTML5 video.
+              </video>
+            </div>
             <div class="pocket-content">
               <h3>Long Pockets</h3>
               <p>
