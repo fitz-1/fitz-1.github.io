@@ -534,6 +534,8 @@
   <script src="../resources/js/loadNavbar.js"></script>
   <script src="../resources/js/script.js"></script>
   <script>
+    console.log('Starting final.html initialization');
+    
     let currentSlide = 0;
     let currentThumbnailPage = 0;
     let autoScrollInterval;
@@ -545,34 +547,53 @@
     const nextThumbPageBtn = document.getElementById('nextThumbPage');
     const thumbnailPageInfo = document.getElementById('thumbnailPageInfo');
 
+    console.log('Gallery elements initialized:', {
+      slidesCount: slides.length,
+      hasThumbnailContainer: !!thumbnailContainer,
+      hasControls: !!(prevThumbPageBtn && nextThumbPageBtn)
+    });
+
     // Initialize the first slide and caption
-    slides[0].classList.add('active');
-    captions[0].classList.add('active');
+    try {
+      slides[0].classList.add('active');
+      captions[0].classList.add('active');
+      console.log('Initial slide activated');
+    } catch (error) {
+      console.error('Error initializing first slide:', error);
+    }
 
     function startAutoScroll() {
+      console.log('Starting auto-scroll');
       autoScrollInterval = setInterval(nextSlide, 5000);
     }
 
     function pauseAutoScroll() {
+      console.log('Pausing auto-scroll');
       clearInterval(autoScrollInterval);
       setTimeout(startAutoScroll, 15000);
     }
 
     // Create thumbnails
     function createThumbnails() {
-      thumbnailContainer.innerHTML = '';
-      slides.forEach((slide, index) => {
-        const thumbnail = document.createElement('img');
-        thumbnail.src = slide.src;
-        thumbnail.alt = slide.alt;
-        thumbnail.className = 'thumbnail' + (index === currentSlide ? ' active' : '');
-        thumbnail.onclick = () => {
-          showSlide(index);
-          pauseAutoScroll();
-        };
-        thumbnailContainer.appendChild(thumbnail);
-      });
-      updateThumbnailPagination();
+      console.log('Creating thumbnails');
+      try {
+        thumbnailContainer.innerHTML = '';
+        slides.forEach((slide, index) => {
+          const thumbnail = document.createElement('img');
+          thumbnail.src = slide.src;
+          thumbnail.alt = slide.alt;
+          thumbnail.className = 'thumbnail' + (index === currentSlide ? ' active' : '');
+          thumbnail.onclick = () => {
+            showSlide(index);
+            pauseAutoScroll();
+          };
+          thumbnailContainer.appendChild(thumbnail);
+        });
+        updateThumbnailPagination();
+        console.log('Thumbnails created successfully');
+      } catch (error) {
+        console.error('Error creating thumbnails:', error);
+      }
     }
 
     function updateThumbnailPagination() {
@@ -628,11 +649,9 @@
       pauseAutoScroll();
     }
 
-    // Initialize thumbnails and start auto-scrolling
-    createThumbnails();
-    startAutoScroll();
-
     document.addEventListener('DOMContentLoaded', function() {
+      console.log('DOM Content Loaded - Starting video initialization');
+      
       // Function to check if element is in viewport
       function isInViewport(element) {
         const rect = element.getBoundingClientRect();
@@ -646,67 +665,93 @@
 
       // Function to load video when in viewport
       function loadVideo(videoContainer) {
+        console.log('Attempting to load video in container:', videoContainer);
         const video = videoContainer.querySelector('video');
-        if (!video) return;
-
-        // Get the appropriate source based on screen size
-        const sources = video.querySelectorAll('source');
-        let selectedSource = sources[sources.length - 1]; // Default to mobile
-
-        if (window.innerWidth >= 1024) {
-          selectedSource = sources[0]; // Desktop
-        } else if (window.innerWidth >= 768) {
-          selectedSource = sources[1]; // Tablet
+        if (!video) {
+          console.log('No video element found in container');
+          return;
         }
 
-        // Set video attributes for mobile
-        video.setAttribute('playsinline', '');
-        video.setAttribute('webkit-playsinline', '');
-        video.setAttribute('muted', '');
-        video.setAttribute('preload', 'none');
-        
-        // Set poster image if available
-        if (video.getAttribute('data-poster')) {
-          video.setAttribute('poster', video.getAttribute('data-poster'));
-        }
+        try {
+          // Get the appropriate source based on screen size
+          const sources = video.querySelectorAll('source');
+          console.log('Found video sources:', sources.length);
+          
+          let selectedSource = sources[sources.length - 1]; // Default to mobile
 
-        // Set source and load
-        video.src = selectedSource.src;
-        video.load();
-
-        // Handle video errors
-        video.addEventListener('error', function() {
-          // Fallback to poster image if video fails to load
-          if (video.poster) {
-            video.style.display = 'none';
-            videoContainer.style.backgroundImage = `url(${video.poster})`;
-            videoContainer.style.backgroundSize = 'cover';
-            videoContainer.style.backgroundPosition = 'center';
+          if (window.innerWidth >= 1024) {
+            selectedSource = sources[0]; // Desktop
+            console.log('Using desktop video source');
+          } else if (window.innerWidth >= 768) {
+            selectedSource = sources[1]; // Tablet
+            console.log('Using tablet video source');
+          } else {
+            console.log('Using mobile video source');
           }
-        });
 
-        // Try to play video when in viewport
-        if (isInViewport(videoContainer)) {
-          const playPromise = video.play();
-          if (playPromise !== undefined) {
-            playPromise.catch(() => {
-              // If autoplay fails, show poster image
-              if (video.poster) {
-                video.style.display = 'none';
-                videoContainer.style.backgroundImage = `url(${video.poster})`;
-                videoContainer.style.backgroundSize = 'cover';
-                videoContainer.style.backgroundPosition = 'center';
-              }
-            });
+          // Set video attributes for mobile
+          video.setAttribute('playsinline', '');
+          video.setAttribute('webkit-playsinline', '');
+          video.setAttribute('muted', '');
+          video.setAttribute('preload', 'none');
+          
+          // Set poster image if available
+          if (video.getAttribute('data-poster')) {
+            video.setAttribute('poster', video.getAttribute('data-poster'));
+            console.log('Poster image set');
           }
+
+          // Set source and load
+          video.src = selectedSource.src;
+          console.log('Setting video source:', selectedSource.src);
+          video.load();
+
+          // Handle video errors
+          video.addEventListener('error', function(e) {
+            console.error('Video loading error:', e);
+            // Fallback to poster image if video fails to load
+            if (video.poster) {
+              console.log('Falling back to poster image');
+              video.style.display = 'none';
+              videoContainer.style.backgroundImage = `url(${video.poster})`;
+              videoContainer.style.backgroundSize = 'cover';
+              videoContainer.style.backgroundPosition = 'center';
+            }
+          });
+
+          // Try to play video when in viewport
+          if (isInViewport(videoContainer)) {
+            console.log('Video in viewport, attempting to play');
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+              playPromise.catch((error) => {
+                console.error('Video autoplay failed:', error);
+                // If autoplay fails, show poster image
+                if (video.poster) {
+                  console.log('Falling back to poster image after autoplay failure');
+                  video.style.display = 'none';
+                  videoContainer.style.backgroundImage = `url(${video.poster})`;
+                  videoContainer.style.backgroundSize = 'cover';
+                  videoContainer.style.backgroundPosition = 'center';
+                }
+              });
+            }
+          }
+        } catch (error) {
+          console.error('Error in loadVideo function:', error);
         }
       }
 
       // Initial check for videos in viewport
       function checkVideos() {
+        console.log('Checking videos in viewport');
         const videoContainers = document.querySelectorAll('.video-container:not(.youtube-container)');
-        videoContainers.forEach(container => {
+        console.log('Found video containers:', videoContainers.length);
+        
+        videoContainers.forEach((container, index) => {
+          console.log(`Checking video container ${index + 1}`);
           if (isInViewport(container)) {
+            console.log(`Video container ${index + 1} is in viewport`);
             loadVideo(container);
           }
         });
@@ -720,25 +765,44 @@
       // Handle YouTube video
       const youtubePlaceholder = document.querySelector('.youtube-placeholder');
       if (youtubePlaceholder) {
+        console.log('YouTube placeholder found, setting up click handler');
         youtubePlaceholder.addEventListener('click', function() {
-          const container = this.parentElement;
-          const iframe = document.createElement('iframe');
-          iframe.style.position = 'absolute';
-          iframe.style.top = '0';
-          iframe.style.left = '0';
-          iframe.style.width = '100%';
-          iframe.style.height = '100%';
-          iframe.src = 'https://www.youtube.com/embed/bYjO07ow-LM?autoplay=1';
-          iframe.frameBorder = '0';
-          iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-          iframe.allowFullscreen = true;
-          
-          // Remove placeholder and add iframe
-          this.remove();
-          container.appendChild(iframe);
+          console.log('YouTube placeholder clicked');
+          try {
+            const container = this.parentElement;
+            const iframe = document.createElement('iframe');
+            iframe.style.position = 'absolute';
+            iframe.style.top = '0';
+            iframe.style.left = '0';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.src = 'https://www.youtube.com/embed/bYjO07ow-LM?autoplay=1';
+            iframe.frameBorder = '0';
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            iframe.allowFullscreen = true;
+            
+            // Remove placeholder and add iframe
+            this.remove();
+            container.appendChild(iframe);
+            console.log('YouTube iframe added successfully');
+          } catch (error) {
+            console.error('Error setting up YouTube iframe:', error);
+          }
         });
+      } else {
+        console.log('YouTube placeholder not found');
       }
     });
+
+    // Initialize thumbnails and start auto-scrolling
+    try {
+      console.log('Initializing gallery');
+      createThumbnails();
+      startAutoScroll();
+      console.log('Gallery initialization complete');
+    } catch (error) {
+      console.error('Error initializing gallery:', error);
+    }
   </script>
 </body>
 </html>
