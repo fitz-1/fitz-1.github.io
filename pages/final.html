@@ -419,13 +419,12 @@
       <div class="feature-section">
         <h2>Product Video</h2>
         <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; margin: 2rem 0;">
-          <iframe 
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
-            src="https://www.youtube.com/embed/bYjO07ow-LM" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen>
-          </iframe>
+          <div class="youtube-placeholder" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            <img src="../resources/media/page-poster.JPG" alt="Video thumbnail" style="width: 100%; height: 100%; object-fit: cover;">
+            <div class="play-button" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.7); color: white; border: 2px solid white; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; z-index: 2;">
+              ▶
+            </div>
+          </div>
         </div>
       </div>
 
@@ -676,8 +675,7 @@
         video.load();
 
         // Handle video errors
-        video.addEventListener('error', function(e) {
-          console.error('Video loading error:', e);
+        video.addEventListener('error', function() {
           // Fallback to poster image if video fails to load
           if (video.poster) {
             video.style.display = 'none';
@@ -691,8 +689,7 @@
         if (isInViewport(videoContainer)) {
           const playPromise = video.play();
           if (playPromise !== undefined) {
-            playPromise.catch(error => {
-              console.log('Video autoplay failed:', error);
+            playPromise.catch(() => {
               // If autoplay fails, show poster image
               if (video.poster) {
                 video.style.display = 'none';
@@ -707,7 +704,7 @@
 
       // Initial check for videos in viewport
       function checkVideos() {
-        const videoContainers = document.querySelectorAll('.video-container');
+        const videoContainers = document.querySelectorAll('.video-container:not(.youtube-container)');
         videoContainers.forEach(container => {
           if (isInViewport(container)) {
             loadVideo(container);
@@ -719,6 +716,28 @@
       window.addEventListener('scroll', checkVideos);
       // Initial check
       checkVideos();
+
+      // Handle YouTube video
+      const youtubePlaceholder = document.querySelector('.youtube-placeholder');
+      if (youtubePlaceholder) {
+        youtubePlaceholder.addEventListener('click', function() {
+          const container = this.parentElement;
+          const iframe = document.createElement('iframe');
+          iframe.style.position = 'absolute';
+          iframe.style.top = '0';
+          iframe.style.left = '0';
+          iframe.style.width = '100%';
+          iframe.style.height = '100%';
+          iframe.src = 'https://www.youtube.com/embed/bYjO07ow-LM?autoplay=1';
+          iframe.frameBorder = '0';
+          iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+          iframe.allowFullscreen = true;
+          
+          // Remove placeholder and add iframe
+          this.remove();
+          container.appendChild(iframe);
+        });
+      }
     });
   </script>
 </body>
