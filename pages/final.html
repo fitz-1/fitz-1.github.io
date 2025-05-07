@@ -194,12 +194,12 @@
 
     .video-container {
       width: 100%;
-      max-width: 300px;
+      max-width: 500px;
       margin: 0 auto;
       background: black;
       border-radius: 8px;
       overflow: hidden;
-      aspect-ratio: 9/16;
+      aspect-ratio: 16/9;
       position: relative;
     }
 
@@ -217,14 +217,38 @@
       align-items: center;
       justify-content: center;
       color: white;
+      position: relative;
     }
 
-    .video-container.loading .video-placeholder {
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      border: 2px solid white;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
       display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2;
     }
 
-    .video-container.loading video {
-      display: none;
+    .play-button::after {
+      content: "▶";
+      font-size: 24px;
+      margin-left: 4px;
+    }
+
+    .static-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     @media (max-width: 768px) {
@@ -240,8 +264,14 @@
       .video-container {
         max-width: 100%;
       }
-      /* Hide videos that are not in viewport on mobile */
-      .video-container:not(.in-viewport) {
+      .video-container video {
+        display: none;
+      }
+      .video-container.playing video {
+        display: block;
+      }
+      .video-container.playing .static-image,
+      .video-container.playing .play-button {
         display: none;
       }
     }
@@ -289,7 +319,7 @@
               <video autoplay muted loop playsinline preload="none" data-poster="../resources/media/page-poster.JPG">
                 <source src="../resources/media/videos/rainStar-desktop.webm" media="(min-width:1024px)" type="video/webm">
                 <source src="../resources/media/videos/rainStar-tablet.webm" media="(min-width:768px)" type="video/webm">
-                <source src="../resources/media/videos/rainStarFar-mobile.webm" type="video/webm">
+                <source src="../resources/media/videos/rainStar-mobile.webm" type="video/webm">
                 Your browser does not support HTML5 video.
               </video>
             </div>
@@ -689,6 +719,61 @@
       window.addEventListener('scroll', checkVideos);
       // Initial check
       checkVideos();
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Function to handle video playback
+      function setupVideoPlayback() {
+        const videoContainers = document.querySelectorAll('.video-container');
+        
+        videoContainers.forEach(container => {
+          const video = container.querySelector('video');
+          const sources = video.querySelectorAll('source');
+          const mobileSource = sources[sources.length - 1]; // Get mobile source
+          
+          // Create static image
+          const img = document.createElement('img');
+          img.className = 'static-image';
+          img.src = mobileSource.src.replace('.webm', '.jpg').replace('videos/', 'thumbnails/');
+          img.alt = 'Video thumbnail';
+          
+          // Create play button
+          const playButton = document.createElement('div');
+          playButton.className = 'play-button';
+          
+          // Add elements to container
+          container.appendChild(img);
+          container.appendChild(playButton);
+          
+          // Handle play button click
+          playButton.addEventListener('click', function() {
+            // Stop all other playing videos
+            document.querySelectorAll('.video-container.playing').forEach(playingContainer => {
+              if (playingContainer !== container) {
+                const playingVideo = playingContainer.querySelector('video');
+                playingVideo.pause();
+                playingContainer.classList.remove('playing');
+              }
+            });
+            
+            // Play this video
+            if (!video.src) {
+              video.src = mobileSource.src;
+              video.load();
+            }
+            video.play();
+            container.classList.add('playing');
+          });
+          
+          // Handle video end
+          video.addEventListener('ended', function() {
+            container.classList.remove('playing');
+          });
+        });
+      }
+
+      // Initialize video playback
+      setupVideoPlayback();
     });
   </script>
 </body>
