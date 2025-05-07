@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://use.typekit.net/wee2inf.css">
   <link rel="stylesheet" href="../resources/css/global.css" />
   <link rel="stylesheet" href="../resources/css/navbar.css" />
-  <link rel="stylesheet" href="../resources/css/style.css" />
+  <link rel="stylesheet" href="../resources/css/styles.css" />
   <link rel="stylesheet" href="../resources/css/page-style.css" />
   <link rel="stylesheet" href="../resources/css/gallery.css" />
   <link rel="stylesheet" href="../resources/css/video-overlay.css" />
@@ -647,19 +647,60 @@
       // Function to load video when in viewport
       function loadVideo(videoContainer) {
         const video = videoContainer.querySelector('video');
-        if (video && !video.src) {
-          // Get the appropriate source based on screen size
-          const sources = video.querySelectorAll('source');
-          let selectedSource = sources[sources.length - 1]; // Default to mobile
+        if (!video) return;
 
-          if (window.innerWidth >= 1024) {
-            selectedSource = sources[0]; // Desktop
-          } else if (window.innerWidth >= 768) {
-            selectedSource = sources[1]; // Tablet
+        // Get the appropriate source based on screen size
+        const sources = video.querySelectorAll('source');
+        let selectedSource = sources[sources.length - 1]; // Default to mobile
+
+        if (window.innerWidth >= 1024) {
+          selectedSource = sources[0]; // Desktop
+        } else if (window.innerWidth >= 768) {
+          selectedSource = sources[1]; // Tablet
+        }
+
+        // Set video attributes for mobile
+        video.setAttribute('playsinline', '');
+        video.setAttribute('webkit-playsinline', '');
+        video.setAttribute('muted', '');
+        video.setAttribute('preload', 'none');
+        
+        // Set poster image if available
+        if (video.getAttribute('data-poster')) {
+          video.setAttribute('poster', video.getAttribute('data-poster'));
+        }
+
+        // Set source and load
+        video.src = selectedSource.src;
+        video.load();
+
+        // Handle video errors
+        video.addEventListener('error', function(e) {
+          console.error('Video loading error:', e);
+          // Fallback to poster image if video fails to load
+          if (video.poster) {
+            video.style.display = 'none';
+            videoContainer.style.backgroundImage = `url(${video.poster})`;
+            videoContainer.style.backgroundSize = 'cover';
+            videoContainer.style.backgroundPosition = 'center';
           }
+        });
 
-          video.src = selectedSource.src;
-          video.load();
+        // Try to play video when in viewport
+        if (isInViewport(videoContainer)) {
+          const playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(error => {
+              console.log('Video autoplay failed:', error);
+              // If autoplay fails, show poster image
+              if (video.poster) {
+                video.style.display = 'none';
+                videoContainer.style.backgroundImage = `url(${video.poster})`;
+                videoContainer.style.backgroundSize = 'cover';
+                videoContainer.style.backgroundPosition = 'center';
+              }
+            });
+          }
         }
       }
 
