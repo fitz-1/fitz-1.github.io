@@ -576,86 +576,17 @@
 
   <script src="../resources/js/loadNavbar.js"></script>
   <script>
-    // Immediate execution
-    console.log('SCRIPT STARTING');
-    document.getElementById('debug').textContent = 'SCRIPT STARTING';
-    
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.slide');
-    const thumbnailContainer = document.getElementById('thumbnailContainer');
-
-    // Initialize the first slide
-    try {
-      if (slides.length > 0) {
-        slides[0].classList.add('active');
-        console.log('Initial slide activated');
-      }
-    } catch (error) {
-      console.error('Error initializing first slide:', error);
-    }
-
-    // Create thumbnails
-    function createThumbnails() {
-      console.log('Creating thumbnails');
-      try {
-        if (!thumbnailContainer) return;
-        
-        thumbnailContainer.innerHTML = '';
-        slides.forEach((slide, index) => {
-          const thumbnail = document.createElement('img');
-          thumbnail.src = slide.src;
-          thumbnail.alt = slide.alt;
-          thumbnail.className = 'thumbnail' + (index === currentSlide ? ' active' : '');
-          thumbnail.onclick = () => showSlide(index);
-          thumbnailContainer.appendChild(thumbnail);
-        });
-        console.log('Thumbnails created successfully');
-      } catch (error) {
-        console.error('Error creating thumbnails:', error);
+    // Define updateDebug first
+    function updateDebug(message) {
+      console.log(message);
+      const debug = document.getElementById('debug');
+      if (debug) {
+        debug.textContent = message;
       }
     }
 
-    function showSlide(index) {
-      if (index < 0 || index >= slides.length) return;
-      
-      slides.forEach(slide => slide.classList.remove('active'));
-      slides[index].classList.add('active');
-      currentSlide = index;
-
-      // Update thumbnail active state
-      const thumbnails = thumbnailContainer.querySelectorAll('.thumbnail');
-      thumbnails.forEach((thumb, i) => {
-        thumb.classList.toggle('active', i === index);
-      });
-    }
-
-    function nextSlide() {
-      if (slides.length === 0) return;
-      currentSlide = (currentSlide + 1) % slides.length;
-      showSlide(currentSlide);
-    }
-
-    function prevSlide() {
-      if (slides.length === 0) return;
-      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-      showSlide(currentSlide);
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('DOM Content Loaded - Basic initialization');
-      
-      // Initialize gallery
-      try {
-        console.log('Initializing gallery');
-        createThumbnails();
-        console.log('Gallery initialization complete');
-      } catch (error) {
-        console.error('Error initializing gallery:', error);
-      }
-    });
-
-    // Update at various points
-    updateDebug('BEFORE DOM CONTENT LOADED');
+    // Now we can use updateDebug
+    updateDebug('SCRIPT STARTING');
     
     document.addEventListener('DOMContentLoaded', function() {
       updateDebug('DOM CONTENT LOADED');
