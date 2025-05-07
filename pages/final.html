@@ -590,13 +590,17 @@
 
     function startAutoScroll() {
       console.log('Starting auto-scroll');
-      autoScrollInterval = setInterval(nextSlide, 5000);
+      // Temporarily disable auto-scroll
+      // if (slides.length > 0) {
+      //   autoScrollInterval = setInterval(nextSlide, 5000);
+      // }
     }
 
     function pauseAutoScroll() {
       console.log('Pausing auto-scroll');
       clearInterval(autoScrollInterval);
-      setTimeout(startAutoScroll, 15000);
+      // Temporarily disable auto-scroll restart
+      // setTimeout(startAutoScroll, 15000);
     }
 
     // Create thumbnails
@@ -683,18 +687,21 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('DOM Content Loaded - Starting video initialization');
+      console.log('DOM Content Loaded - Starting basic initialization');
       
       // Initialize gallery first
       try {
         console.log('Initializing gallery');
         createThumbnails();
-        startAutoScroll();
+        // Temporarily disable auto-scroll
+        // startAutoScroll();
         console.log('Gallery initialization complete');
       } catch (error) {
         console.error('Error initializing gallery:', error);
       }
 
+      // Temporarily disable video loading
+      /*
       // Function to check if element is in viewport
       function isInViewport(element) {
         try {
@@ -821,6 +828,7 @@
 
       // Initial check with delay
       setTimeout(checkVideos, 1000);
+      */
 
       // Handle YouTube video
       const youtubePlaceholder = document.querySelector('.youtube-placeholder');
