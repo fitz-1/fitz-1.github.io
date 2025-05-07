@@ -202,8 +202,6 @@
       overflow: hidden;
       aspect-ratio: 16/9;
       position: relative;
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
     }
 
     .video-container video {
@@ -303,15 +301,6 @@
   </style>
 </head>
 <body>
-  <!-- Add loading overlay -->
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-message">
-      <h2>Welcome to Nova Tent</h2>
-      <p>This page contains multiple videos and images. Click the button below to load the content.</p>
-      <button class="loading-button" id="loadContent">Load Content</button>
-    </div>
-  </div>
-
   <!-- Navigation Bar Container -->
   <header>
     <div id="navbar-container"></div>
@@ -579,43 +568,6 @@
   <script>
     console.log('Starting final.html initialization');
     
-    // Add loading state management
-    let contentLoaded = false;
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    const loadContentButton = document.getElementById('loadContent');
-
-    // Function to initialize content
-    function initializeContent() {
-      console.log('Initializing content');
-      if (contentLoaded) return;
-      
-      // Hide loading overlay
-      loadingOverlay.style.display = 'none';
-      contentLoaded = true;
-
-      // Initialize gallery
-      try {
-        console.log('Initializing gallery');
-        createThumbnails();
-        startAutoScroll();
-        console.log('Gallery initialization complete');
-      } catch (error) {
-        console.error('Error initializing gallery:', error);
-      }
-
-      // Initialize videos after a delay
-      setTimeout(() => {
-        console.log('Starting video initialization');
-        checkVideos();
-      }, 2000);
-    }
-
-    // Add click handler for load content button
-    loadContentButton.addEventListener('click', function() {
-      console.log('Load content button clicked');
-      initializeContent();
-    });
-
     let currentSlide = 0;
     let currentThumbnailPage = 0;
     let autoScrollInterval;
@@ -626,12 +578,6 @@
     const prevThumbPageBtn = document.getElementById('prevThumbPage');
     const nextThumbPageBtn = document.getElementById('nextThumbPage');
     const thumbnailPageInfo = document.getElementById('thumbnailPageInfo');
-
-    console.log('Gallery elements initialized:', {
-      slidesCount: slides.length,
-      hasThumbnailContainer: !!thumbnailContainer,
-      hasControls: !!(prevThumbPageBtn && nextThumbPageBtn)
-    });
 
     // Initialize the first slide and caption
     try {
@@ -709,29 +655,197 @@
     }
 
     function showSlide(index) {
-      slides.forEach(slide => slide.classList.remove('active'));
-      captions.forEach(caption => caption.classList.remove('active'));
+      if (index < 0 || index >= slides.length) return;
       
+      slides.forEach(slide => slide.classList.remove('active'));
       slides[index].classList.add('active');
-      captions[index].classList.add('active');
       currentSlide = index;
+
+      // Update thumbnail active state
+      const thumbnails = thumbnailContainer.querySelectorAll('.thumbnail');
+      thumbnails.forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === index);
+      });
     }
 
     function nextSlide() {
+      if (slides.length === 0) return;
       currentSlide = (currentSlide + 1) % slides.length;
       showSlide(currentSlide);
       pauseAutoScroll();
     }
 
     function prevSlide() {
+      if (slides.length === 0) return;
       currentSlide = (currentSlide - 1 + slides.length) % slides.length;
       showSlide(currentSlide);
       pauseAutoScroll();
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('DOM Content Loaded - Basic initialization only');
-      // The rest of the initialization will happen after user interaction
+      console.log('DOM Content Loaded - Starting video initialization');
+      
+      // Function to check if element is in viewport
+      function isInViewport(element) {
+        try {
+          const rect = element.getBoundingClientRect();
+          const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+          const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+          
+          return (
+            rect.top >= -100 &&
+            rect.left >= -100 &&
+            rect.bottom <= windowHeight + 100 &&
+            rect.right <= windowWidth + 100
+          );
+        } catch (error) {
+          console.error('Error checking viewport:', error);
+          return false;
+        }
+      }
+
+      // Function to load video when in viewport
+      function loadVideo(videoContainer) {
+        const video = videoContainer.querySelector('video');
+        if (!video) return;
+
+        // If video is already loaded, skip
+        if (video.readyState >= 2) return;
+
+        try {
+          // Set up poster image as fallback
+          if (video.getAttribute('data-poster')) {
+            videoContainer.style.backgroundImage = `url(${video.getAttribute('data-poster')})`;
+            videoContainer.style.backgroundSize = 'cover';
+            videoContainer.style.backgroundPosition = 'center';
+            video.style.display = 'none';
+          }
+
+          // Get appropriate source based on screen size
+          const sources = video.querySelectorAll('source');
+          if (sources.length === 0) return;
+
+          let selectedSource = sources[sources.length - 1]; // Default to mobile
+          if (window.innerWidth >= 1024) {
+            selectedSource = sources[0]; // Desktop
+          } else if (window.innerWidth >= 768) {
+            selectedSource = sources[1]; // Tablet
+          }
+
+          // Set video attributes
+          video.setAttribute('playsinline', '');
+          video.setAttribute('webkit-playsinline', '');
+          video.setAttribute('muted', '');
+          video.setAttribute('preload', 'none');
+          
+          if (video.getAttribute('data-poster')) {
+            video.setAttribute('poster', video.getAttribute('data-poster'));
+          }
+
+          // Set source and load
+          video.src = selectedSource.src;
+
+          // Handle video errors
+          video.addEventListener('error', function() {
+            if (video.poster) {
+              video.style.display = 'none';
+            }
+          });
+
+          // Try to play video when in viewport
+          if (isInViewport(videoContainer)) {
+            setTimeout(() => {
+              try {
+                video.style.display = 'block';
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                  playPromise.catch(() => {
+                    if (video.poster) {
+                      video.style.display = 'none';
+                    }
+                  });
+                }
+              } catch (error) {
+                if (video.poster) {
+                  video.style.display = 'none';
+                }
+              }
+            }, 500);
+          }
+        } catch (error) {
+          if (video.poster) {
+            video.style.display = 'none';
+          }
+        }
+      }
+
+      // Track which videos have been processed
+      const processedVideos = new Set();
+
+      // Check videos in viewport
+      function checkVideos() {
+        const videoContainers = document.querySelectorAll('.video-container:not(.youtube-container)');
+        
+        videoContainers.forEach((container, index) => {
+          const containerId = container.id || `container-${index}`;
+          
+          if (!processedVideos.has(containerId) && isInViewport(container)) {
+            processedVideos.add(containerId);
+            setTimeout(() => {
+              try {
+                loadVideo(container);
+              } catch (error) {
+                console.error(`Error loading video ${index + 1}:`, error);
+              }
+            }, index * 1000); // Stagger video loading
+          }
+        });
+      }
+
+      // Check videos on scroll with debounce
+      let scrollTimeout;
+      window.addEventListener('scroll', function() {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(checkVideos, 250);
+      });
+
+      // Initial check with delay
+      setTimeout(checkVideos, 1000);
+
+      // Handle YouTube video
+      const youtubePlaceholder = document.querySelector('.youtube-placeholder');
+      if (youtubePlaceholder) {
+        youtubePlaceholder.addEventListener('click', function() {
+          try {
+            const container = this.parentElement;
+            const iframe = document.createElement('iframe');
+            iframe.style.position = 'absolute';
+            iframe.style.top = '0';
+            iframe.style.left = '0';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.src = 'https://www.youtube.com/embed/bYjO07ow-LM?autoplay=1';
+            iframe.frameBorder = '0';
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            iframe.allowFullscreen = true;
+            
+            this.remove();
+            container.appendChild(iframe);
+          } catch (error) {
+            console.error('Error setting up YouTube iframe:', error);
+          }
+        });
+      }
+
+      // Initialize thumbnails and start auto-scrolling
+      try {
+        console.log('Initializing gallery');
+        createThumbnails();
+        startAutoScroll();
+        console.log('Gallery initialization complete');
+      } catch (error) {
+        console.error('Error initializing gallery:', error);
+      }
     });
   </script>
 </body>
