@@ -94,14 +94,4 @@ document.addEventListener('DOMContentLoaded', function() {
       observer.observe(video);
     });
   }
-});
-
-// Initialize mobile optimizations
-document.addEventListener('DOMContentLoaded', function() {
-  optimizeVideosForMobile();
-  
-  // Re-optimize on resize
-  window.addEventListener('resize', function() {
-    optimizeVideosForMobile();
-  });
 }); 
