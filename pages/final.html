@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://use.typekit.net/wee2inf.css">
   <link rel="stylesheet" href="../resources/css/global.css" />
   <link rel="stylesheet" href="../resources/css/navbar.css" />
-  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../resources/css/style.css" />
   <link rel="stylesheet" href="../resources/css/page-style.css" />
   <link rel="stylesheet" href="../resources/css/gallery.css" />
   <link rel="stylesheet" href="../resources/css/video-overlay.css" />
@@ -632,7 +632,6 @@
     createThumbnails();
     startAutoScroll();
 
-    // Add this new script at the end of the body
     document.addEventListener('DOMContentLoaded', function() {
       // Function to check if element is in viewport
       function isInViewport(element) {
@@ -661,7 +660,6 @@
 
           video.src = selectedSource.src;
           video.load();
-          videoContainer.classList.remove('loading');
         }
       }
 
@@ -670,93 +668,15 @@
         const videoContainers = document.querySelectorAll('.video-container');
         videoContainers.forEach(container => {
           if (isInViewport(container)) {
-            container.classList.add('in-viewport');
             loadVideo(container);
-          } else {
-            container.classList.remove('in-viewport');
           }
         });
       }
-
-      // Add loading placeholders
-      const videoContainers = document.querySelectorAll('.video-container');
-      videoContainers.forEach(container => {
-        container.classList.add('loading');
-        const placeholder = document.createElement('div');
-        placeholder.className = 'video-placeholder';
-        placeholder.textContent = 'Loading...';
-        container.appendChild(placeholder);
-      });
 
       // Check videos on scroll
       window.addEventListener('scroll', checkVideos);
       // Initial check
       checkVideos();
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-      // Function to handle video playback
-      function setupVideoPlayback() {
-        const videoContainers = document.querySelectorAll('.video-container');
-        
-        videoContainers.forEach(container => {
-          // Get the video source from the data attribute
-          const videoSrc = container.getAttribute('data-video-src');
-          
-          // Create static image
-          const img = document.createElement('img');
-          img.className = 'static-image';
-          img.src = videoSrc.replace('.webm', '.jpg').replace('videos/', 'thumbnails/');
-          img.alt = 'Video thumbnail';
-          
-          // Create play button
-          const playButton = document.createElement('div');
-          playButton.className = 'play-button';
-          
-          // Add elements to container
-          container.appendChild(img);
-          container.appendChild(playButton);
-          
-          // Handle play button click
-          playButton.addEventListener('click', function() {
-            // Stop all other playing videos
-            document.querySelectorAll('.video-container.playing').forEach(playingContainer => {
-              if (playingContainer !== container) {
-                const playingVideo = playingContainer.querySelector('video');
-                if (playingVideo) {
-                  playingVideo.pause();
-                  playingVideo.remove();
-                }
-                playingContainer.classList.remove('playing');
-              }
-            });
-            
-            // Create and play this video
-            const video = document.createElement('video');
-            video.autoplay = true;
-            video.muted = true;
-            video.loop = true;
-            video.playsInline = true;
-            
-            const source = document.createElement('source');
-            source.src = videoSrc;
-            source.type = 'video/webm';
-            
-            video.appendChild(source);
-            container.appendChild(video);
-            container.classList.add('playing');
-            
-            // Handle video end
-            video.addEventListener('ended', function() {
-              container.classList.remove('playing');
-              video.remove();
-            });
-          });
-        });
-      }
-
-      // Initialize video playback
-      setupVideoPlayback();
     });
   </script>
 </body>
