@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Page</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    #debug {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #ff0000;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      z-index: 9999;
+    }
+    .content {
+      margin-top: 60px;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <div id="debug">INITIALIZING...</div>
+  
+  <div class="content">
+    <h1>Test Page</h1>
+    <p>This is a minimal test page to verify basic functionality.</p>
+  </div>
+
+  <script>
+    // Simple debug function
+    function debug(message) {
+      console.log(message);
+      const debug = document.getElementById('debug');
+      if (debug) {
+        debug.textContent = message;
+      }
+    }
+
+    // Initial message
+    debug('PAGE LOADED');
+
+    // Update every second
+    let count = 0;
+    setInterval(() => {
+      count++;
+      debug(`RUNNING: ${count} seconds`);
+    }, 1000);
+  </script>
+</body>
+</html> 
