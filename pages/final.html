@@ -200,12 +200,31 @@
       border-radius: 8px;
       overflow: hidden;
       aspect-ratio: 9/16;
+      position: relative;
     }
 
     .video-container video {
       width: 100%;
       height: 100%;
       object-fit: contain;
+    }
+
+    .video-placeholder {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .video-container.loading .video-placeholder {
+      display: flex;
+    }
+
+    .video-container.loading video {
+      display: none;
     }
 
     @media (max-width: 768px) {
@@ -220,6 +239,10 @@
       }
       .video-container {
         max-width: 100%;
+      }
+      /* Hide videos that are not in viewport on mobile */
+      .video-container:not(.in-viewport) {
+        display: none;
       }
     }
   </style>
@@ -605,6 +628,68 @@
     // Initialize thumbnails and start auto-scrolling
     createThumbnails();
     startAutoScroll();
+
+    // Add this new script at the end of the body
+    document.addEventListener('DOMContentLoaded', function() {
+      // Function to check if element is in viewport
+      function isInViewport(element) {
+        const rect = element.getBoundingClientRect();
+        return (
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+      }
+
+      // Function to load video when in viewport
+      function loadVideo(videoContainer) {
+        const video = videoContainer.querySelector('video');
+        if (video && !video.src) {
+          // Get the appropriate source based on screen size
+          const sources = video.querySelectorAll('source');
+          let selectedSource = sources[sources.length - 1]; // Default to mobile
+
+          if (window.innerWidth >= 1024) {
+            selectedSource = sources[0]; // Desktop
+          } else if (window.innerWidth >= 768) {
+            selectedSource = sources[1]; // Tablet
+          }
+
+          video.src = selectedSource.src;
+          video.load();
+          videoContainer.classList.remove('loading');
+        }
+      }
+
+      // Initial check for videos in viewport
+      function checkVideos() {
+        const videoContainers = document.querySelectorAll('.video-container');
+        videoContainers.forEach(container => {
+          if (isInViewport(container)) {
+            container.classList.add('in-viewport');
+            loadVideo(container);
+          } else {
+            container.classList.remove('in-viewport');
+          }
+        });
+      }
+
+      // Add loading placeholders
+      const videoContainers = document.querySelectorAll('.video-container');
+      videoContainers.forEach(container => {
+        container.classList.add('loading');
+        const placeholder = document.createElement('div');
+        placeholder.className = 'video-placeholder';
+        placeholder.textContent = 'Loading...';
+        container.appendChild(placeholder);
+      });
+
+      // Check videos on scroll
+      window.addEventListener('scroll', checkVideos);
+      // Initial check
+      checkVideos();
+    });
   </script>
 </body>
 </html>
