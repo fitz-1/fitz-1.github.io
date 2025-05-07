@@ -100,7 +100,7 @@
 
   /* Mobile video optimizations */
   #bg-video {
-    transform: scale(1.1); /* Slightly zoom to prevent black bars */
+    transform: scale(1); /* Slightly zoom to prevent black bars */
     filter: brightness(1.2);
   }
 }
@@ -134,7 +134,7 @@
 
   /* Mobile video optimizations */
   #bg-video {
-    transform: scale(1.2); /* More zoom for smaller screens */
+    transform: scale(1); /* More zoom for smaller screens */
     filter: brightness(1.1);
   }
 }
@@ -166,7 +166,7 @@
 
   /* iPhone video optimizations */
   #bg-video {
-    transform: scale(1.3); /* Maximum zoom for iPhone */
+    transform: scale(1); /* Maximum zoom for iPhone */
     filter: brightness(1);
   }
 } 

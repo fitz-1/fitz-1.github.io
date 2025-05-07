@@ -1,0 +1,6 @@
+@media (max-width: 390px) {
+    .loading-video {
+        object-fit: contain;
+        height: 100%;
+    }
+} 
