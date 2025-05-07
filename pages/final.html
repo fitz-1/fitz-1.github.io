@@ -781,7 +781,14 @@
             const container = videoContainers[index];
             if (isInViewport(container)) {
               console.log(`Video container ${index + 1} is in viewport`);
-              loadVideo(container);
+              // Delay loading each video
+              setTimeout(() => {
+                try {
+                  loadVideo(container);
+                } catch (error) {
+                  console.error(`Error loading video ${index + 1}:`, error);
+                }
+              }, index * 1000); // Stagger video loading
             } else {
               console.log(`Video container ${index + 1} is not in viewport`);
             }
