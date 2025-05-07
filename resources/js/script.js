@@ -18,11 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
     video.style.opacity = '1';
   });
 
-  // Handle video errors
-  video.addEventListener('error', function(e) {
-    console.error('Video loading error:', e);
+  // Handle video errors silently
+  video.addEventListener('error', function() {
     // Fallback to poster image if video fails to load
-    video.style.display = 'none';
     const poster = video.getAttribute('poster');
     if (poster && poster !== 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7') {
       const hero = document.querySelector('.hero');
@@ -42,15 +40,15 @@ document.addEventListener('DOMContentLoaded', function() {
   // Handle video pause
   video.addEventListener('pause', function() {
     if (!video.ended) {
-      video.play().catch(function(error) {
-        console.error('Error playing video:', error);
+      video.play().catch(function() {
+        // Silently handle autoplay failure
       });
     }
   });
 
   // Start video playback
-  video.play().catch(function(error) {
-    console.error('Error playing video:', error);
+  video.play().catch(function() {
+    // Silently handle autoplay failure
   });
 
   // Mobile video optimization
@@ -70,7 +68,6 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Add error handling
       video.addEventListener('error', function() {
-        console.error('Video failed to load:', video.src);
         // Fallback to poster image if video fails to load
         if (video.poster) {
           video.parentElement.style.backgroundImage = `url(${video.poster})`;
@@ -82,8 +79,8 @@ document.addEventListener('DOMContentLoaded', function() {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            video.play().catch(error => {
-              console.log('Video autoplay failed:', error);
+            video.play().catch(() => {
+              // Silently handle autoplay failure
             });
           } else {
             video.pause();
