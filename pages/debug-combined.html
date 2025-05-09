@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Combined Test</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f0f0f0;
+    }
+    #debug {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #ff0000;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      z-index: 9999;
+    }
+    .content {
+      margin-top: 60px;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 1;
+    }
+    #log {
+      margin-top: 20px;
+      padding: 10px;
+      background: #eee;
+      border-radius: 5px;
+      font-family: monospace;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .hero {
+      position: relative;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+    }
+    .hero video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+    }
+    .gallery-section {
+      margin: 2rem 0;
+    }
+    .slideshow-wrapper {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .slideshow-container {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      overflow: hidden;
+    }
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      object-fit: cover;
+    }
+    .slide.active {
+      opacity: 1;
+    }
+    .slideshow-controls {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      z-index: 2;
+    }
+    .slideshow-controls:first-child {
+      left: 10px;
+    }
+    .slideshow-controls:last-child {
+      right: 10px;
+    }
+    .thumbnail-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .thumbnail {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      border-radius: 4px;
+    }
+    .thumbnail.active {
+      border-color: #ff0000;
+    }
+  </style>
+</head>
+<body>
+  <div id="debug">INITIALIZING...</div>
+  
+  <section class="hero">
+    <video autoplay muted loop playsinline preload="none" id="bg-video" data-poster="../resources/media/loading-poster.webp">
+      <source src="../resources/media/videos/rainStar-mobile.webm" type="video/webm">
+      Your browser does not support HTML5 video.
+    </video>
+    <div class="video-overlay">
+      <h1>Combined Test</h1>
+      <p>Testing video and gallery functionality together</p>
+    </div>
+  </section>
+
+  <div class="content">
+    <h1>Combined Test</h1>
+    
+    <div class="gallery-section">
+      <h2>Gallery</h2>
+      <div class="slideshow-wrapper">
+        <button onclick="prevSlide()" class="slideshow-controls">←</button>
+        <div class="slideshow-container">
+          <img src="../resources/media/final/farOut.JPG" alt="Nova Tent from a distance" class="slide active">
+          <img src="../resources/media/final/closer.JPG" alt="Nova Tent closer view" class="slide">
+          <img src="../resources/media/final/leftSide.JPG" alt="Nova Tent left side" class="slide">
+          <img src="../resources/media/final/rightSide.JPG" alt="Nova Tent right side" class="slide">
+          <img src="../resources/media/final/inside.JPG" alt="Nova Tent interior view" class="slide">
+        </div>
+        <button onclick="nextSlide()" class="slideshow-controls">→</button>
+      </div>
+      <div class="thumbnail-container" id="thumbnailContainer">
+        <!-- Thumbnails will be populated by JavaScript -->
+      </div>
+    </div>
+
+    <div id="log"></div>
+  </div>
+
+  <script>
+    // Log function that writes to both console and page
+    function log(message) {
+      console.log(message);
+      const logElement = document.getElementById('log');
+      if (logElement) {
+        const entry = document.createElement('div');
+        entry.textContent = `${new Date().toISOString()}: ${message}`;
+        logElement.appendChild(entry);
+        logElement.scrollTop = logElement.scrollHeight;
+      }
+    }
+
+    // Debug banner update
+    function updateDebug(message) {
+      const debug = document.getElementById('debug');
+      if (debug) {
+        debug.textContent = message;
+      }
+    }
+
+    // Initial setup
+    log('Page starting');
+    updateDebug('INITIALIZING');
+
+    // Video handling
+    const video = document.getElementById('bg-video');
+    if (video) {
+      log('Video element found');
+      
+      // Track video events
+      video.addEventListener('loadstart', () => log('Video load started'));
+      video.addEventListener('loadeddata', () => log('Video data loaded'));
+      video.addEventListener('canplay', () => log('Video can play'));
+      video.addEventListener('playing', () => log('Video playing'));
+      video.addEventListener('error', (e) => {
+        log(`Video error: ${e.target.error.message}`);
+        updateDebug(`VIDEO ERROR: ${e.target.error.message}`);
+      });
+
+      // Try to play video
+      video.play()
+        .then(() => log('Video playback started'))
+        .catch(error => {
+          log(`Error playing video: ${error.message}`);
+          updateDebug(`PLAYBACK ERROR: ${error.message}`);
+        });
+    } else {
+      log('ERROR: Video element not found');
+    }
+
+    // Gallery functionality
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const thumbnails = document.getElementById('thumbnailContainer');
+
+    // Create thumbnails
+    slides.forEach((slide, index) => {
+      const thumbnail = document.createElement('img');
+      thumbnail.src = slide.src;
+      thumbnail.alt = slide.alt;
+      thumbnail.className = 'thumbnail' + (index === 0 ? ' active' : '');
+      thumbnail.onclick = () => showSlide(index);
+      thumbnails.appendChild(thumbnail);
+    });
+
+    function showSlide(index) {
+      log(`Showing slide ${index}`);
+      slides[currentSlide].classList.remove('active');
+      thumbnails.children[currentSlide].classList.remove('active');
+      currentSlide = index;
+      slides[currentSlide].classList.add('active');
+      thumbnails.children[currentSlide].classList.add('active');
+    }
+
+    function nextSlide() {
+      const next = (currentSlide + 1) % slides.length;
+      showSlide(next);
+    }
+
+    function prevSlide() {
+      const prev = (currentSlide - 1 + slides.length) % slides.length;
+      showSlide(prev);
+    }
+
+    // Track page load events
+    document.addEventListener('DOMContentLoaded', () => {
+      log('DOM Content Loaded');
+      updateDebug('DOM LOADED');
+    });
+
+    window.addEventListener('load', () => {
+      log('Window Loaded');
+      updateDebug('WINDOW LOADED');
+    });
+
+    // Track errors
+    window.onerror = function(msg, url, line) {
+      log(`ERROR: ${msg} at line ${line}`);
+      updateDebug(`ERROR: ${msg}`);
+      return false;
+    };
+
+    // Track unhandled rejections
+    window.onunhandledrejection = function(event) {
+      log(`UNHANDLED REJECTION: ${event.reason}`);
+      updateDebug(`REJECTION: ${event.reason}`);
+    };
+
+    // Update every second
+    let count = 0;
+    const interval = setInterval(() => {
+      count++;
+      log(`Heartbeat ${count}`);
+      
+      // Stop after 5 minutes
+      if (count >= 300) {
+        clearInterval(interval);
+        log('Test complete');
+        updateDebug('TEST COMPLETE');
+      }
+    }, 1000);
+  </script>
+</body>
+</html> 
