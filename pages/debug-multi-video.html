@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Multi-Video Test</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f0f0f0;
+    }
+    #debug {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #ff0000;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      z-index: 9999;
+    }
+    .content {
+      margin-top: 60px;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 1;
+    }
+    #log {
+      margin-top: 20px;
+      padding: 10px;
+      background: #eee;
+      border-radius: 5px;
+      font-family: monospace;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .hero {
+      position: relative;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+    }
+    .hero video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+    }
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin: 2rem 0;
+    }
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .video-container video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+  <div id="debug">INITIALIZING...</div>
+  
+  <section class="hero">
+    <video autoplay muted loop playsinline preload="none" id="bg-video" data-poster="../resources/media/loading-poster.webp">
+      <source src="../resources/media/videos/rainStar-mobile.webm" type="video/webm">
+      Your browser does not support HTML5 video.
+    </video>
+    <div class="video-overlay">
+      <h1>Multi-Video Test</h1>
+      <p>Testing multiple video elements</p>
+    </div>
+  </section>
+
+  <div class="content">
+    <h1>Multi-Video Test</h1>
+    
+    <div class="video-grid">
+      <div class="video-container">
+        <video autoplay muted loop playsinline preload="none">
+          <source src="../resources/media/videos/rainStar-mobile.webm" type="video/webm">
+          Your browser does not support HTML5 video.
+        </video>
+      </div>
+      <div class="video-container">
+        <video autoplay muted loop playsinline preload="none">
+          <source src="../resources/media/videos/rainStar-mobile.webm" type="video/webm">
+          Your browser does not support HTML5 video.
+        </video>
+      </div>
+      <div class="video-container">
+        <video autoplay muted loop playsinline preload="none">
+          <source src="../resources/media/videos/rainStar-mobile.webm" type="video/webm">
+          Your browser does not support HTML5 video.
+        </video>
+      </div>
+      <div class="video-container">
+        <video autoplay muted loop playsinline preload="none">
+          <source src="../resources/media/videos/rainStar-mobile.webm" type="video/webm">
+          Your browser does not support HTML5 video.
+        </video>
+      </div>
+    </div>
+
+    <div id="log"></div>
+  </div>
+
+  <script>
+    // Log function that writes to both console and page
+    function log(message) {
+      console.log(message);
+      const logElement = document.getElementById('log');
+      if (logElement) {
+        const entry = document.createElement('div');
+        entry.textContent = `${new Date().toISOString()}: ${message}`;
+        logElement.appendChild(entry);
+        logElement.scrollTop = logElement.scrollHeight;
+      }
+    }
+
+    // Debug banner update
+    function updateDebug(message) {
+      const debug = document.getElementById('debug');
+      if (debug) {
+        debug.textContent = message;
+      }
+    }
+
+    // Initial setup
+    log('Page starting');
+    updateDebug('INITIALIZING');
+
+    // Video handling
+    const videos = document.querySelectorAll('video');
+    log(`Found ${videos.length} video elements`);
+
+    videos.forEach((video, index) => {
+      // Track video events
+      video.addEventListener('loadstart', () => log(`Video ${index} load started`));
+      video.addEventListener('loadeddata', () => log(`Video ${index} data loaded`));
+      video.addEventListener('canplay', () => log(`Video ${index} can play`));
+      video.addEventListener('playing', () => log(`Video ${index} playing`));
+      video.addEventListener('error', (e) => {
+        log(`Video ${index} error: ${e.target.error.message}`);
+        updateDebug(`VIDEO ${index} ERROR: ${e.target.error.message}`);
+      });
+
+      // Try to play video
+      video.play()
+        .then(() => log(`Video ${index} playback started`))
+        .catch(error => {
+          log(`Error playing video ${index}: ${error.message}`);
+          updateDebug(`PLAYBACK ERROR ${index}: ${error.message}`);
+        });
+    });
+
+    // Track page load events
+    document.addEventListener('DOMContentLoaded', () => {
+      log('DOM Content Loaded');
+      updateDebug('DOM LOADED');
+    });
+
+    window.addEventListener('load', () => {
+      log('Window Loaded');
+      updateDebug('WINDOW LOADED');
+    });
+
+    // Track errors
+    window.onerror = function(msg, url, line) {
+      log(`ERROR: ${msg} at line ${line}`);
+      updateDebug(`ERROR: ${msg}`);
+      return false;
+    };
+
+    // Track unhandled rejections
+    window.onunhandledrejection = function(event) {
+      log(`UNHANDLED REJECTION: ${event.reason}`);
+      updateDebug(`REJECTION: ${event.reason}`);
+    };
+
+    // Update every second
+    let count = 0;
+    const interval = setInterval(() => {
+      count++;
+      log(`Heartbeat ${count}`);
+      
+      // Stop after 5 minutes
+      if (count >= 300) {
+        clearInterval(interval);
+        log('Test complete');
+        updateDebug('TEST COMPLETE');
+      }
+    }, 1000);
+  </script>
+</body>
+</html> 
