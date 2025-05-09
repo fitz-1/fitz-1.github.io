@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Navbar Test</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    #debug {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #ff0000;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      z-index: 9999;
+    }
+    .content {
+      margin-top: 60px;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    #log {
+      margin-top: 20px;
+      padding: 10px;
+      background: #eee;
+      border-radius: 5px;
+      font-family: monospace;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="debug">INITIALIZING...</div>
+  
+  <header>
+    <div id="navbar-container"></div>
+  </header>
+
+  <div class="content">
+    <h1>Navbar Test</h1>
+    <div id="log"></div>
+  </div>
+
+  <script>
+    // Log function that writes to both console and page
+    function log(message) {
+      console.log(message);
+      const logElement = document.getElementById('log');
+      if (logElement) {
+        const entry = document.createElement('div');
+        entry.textContent = `${new Date().toISOString()}: ${message}`;
+        logElement.appendChild(entry);
+        logElement.scrollTop = logElement.scrollHeight;
+      }
+    }
+
+    // Debug banner update
+    function updateDebug(message) {
+      const debug = document.getElementById('debug');
+      if (debug) {
+        debug.textContent = message;
+      }
+    }
+
+    // Initial setup
+    log('Page starting');
+    updateDebug('INITIALIZING');
+
+    // Load navbar
+    log('Loading navbar...');
+    fetch('../resources/components/navbar.html')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.text();
+      })
+      .then(html => {
+        log('Navbar HTML loaded');
+        const container = document.getElementById('navbar-container');
+        if (container) {
+          container.innerHTML = html;
+          log('Navbar inserted into page');
+        } else {
+          log('ERROR: Navbar container not found');
+        }
+      })
+      .catch(error => {
+        log(`ERROR loading navbar: ${error.message}`);
+        updateDebug(`NAVBAR ERROR: ${error.message}`);
+      });
+
+    // Track page load events
+    document.addEventListener('DOMContentLoaded', () => {
+      log('DOM Content Loaded');
+      updateDebug('DOM LOADED');
+    });
+
+    window.addEventListener('load', () => {
+      log('Window Loaded');
+      updateDebug('WINDOW LOADED');
+    });
+
+    // Track errors
+    window.onerror = function(msg, url, line) {
+      log(`ERROR: ${msg} at line ${line}`);
+      updateDebug(`ERROR: ${msg}`);
+      return false;
+    };
+
+    // Track unhandled rejections
+    window.onunhandledrejection = function(event) {
+      log(`UNHANDLED REJECTION: ${event.reason}`);
+      updateDebug(`REJECTION: ${event.reason}`);
+    };
+
+    // Update every second
+    let count = 0;
+    const interval = setInterval(() => {
+      count++;
+      log(`Heartbeat ${count}`);
+      
+      // Stop after 5 minutes
+      if (count >= 300) {
+        clearInterval(interval);
+        log('Test complete');
+        updateDebug('TEST COMPLETE');
+      }
+    }, 1000);
+  </script>
+</body>
+</html> 
