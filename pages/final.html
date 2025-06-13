@@ -29,7 +29,7 @@
     h1 {
       text-align: center;
       margin-bottom: 2rem;
-      color: #ff0000;
+      color: #333;
       font-size: 2.5rem;
     }
     .page-intro {
@@ -37,7 +37,7 @@
       margin-bottom: 3rem;
       padding: 0 1rem;
       background: #fff;
-      border: 3px solid #ff0000;
+      border: 1px solid #ddd;
       border-radius: 10px;
       padding: 20px;
     }
@@ -335,8 +335,6 @@
   </style>
 </head>
 <body>
-  <div id="debug">PAGE LOADING...</div>
-  
   <!-- Navigation Bar Container -->
   <header>
     <div id="navbar-container"></div>
@@ -576,30 +574,38 @@
 
   <script src="../resources/js/loadNavbar.js"></script>
   <script>
-    // Define updateDebug first
-    function updateDebug(message) {
-      console.log(message);
-      const debug = document.getElementById('debug');
-      if (debug) {
-        debug.textContent = message;
-      }
+    // Gallery functionality
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const thumbnails = document.getElementById('thumbnailContainer');
+
+    // Create thumbnails
+    slides.forEach((slide, index) => {
+      const thumbnail = document.createElement('img');
+      thumbnail.src = slide.src;
+      thumbnail.alt = slide.alt;
+      thumbnail.className = 'thumbnail' + (index === 0 ? ' active' : '');
+      thumbnail.onclick = () => showSlide(index);
+      thumbnails.appendChild(thumbnail);
+    });
+
+    function showSlide(index) {
+      slides[currentSlide].classList.remove('active');
+      thumbnails.children[currentSlide].classList.remove('active');
+      currentSlide = index;
+      slides[currentSlide].classList.add('active');
+      thumbnails.children[currentSlide].classList.add('active');
     }
 
-    // Now we can use updateDebug
-    updateDebug('SCRIPT STARTING');
-    
-    document.addEventListener('DOMContentLoaded', function() {
-      updateDebug('DOM CONTENT LOADED');
-    });
+    function nextSlide() {
+      const next = (currentSlide + 1) % slides.length;
+      showSlide(next);
+    }
 
-    window.addEventListener('load', function() {
-      updateDebug('WINDOW LOADED');
-    });
-
-    // Force some console output
-    setInterval(function() {
-      updateDebug('HEARTBEAT: ' + new Date().toISOString());
-    }, 1000);
+    function prevSlide() {
+      const prev = (currentSlide - 1 + slides.length) % slides.length;
+      showSlide(prev);
+    }
   </script>
 </body>
 </html>
