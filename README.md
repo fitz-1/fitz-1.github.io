@@ -72,6 +72,16 @@ Mobile photo gallery.
   `≤768px` / `≤480px` breakpoints in `index.html`'s inline styles and
   `resources/css/global.css`.
 
+Materials Testing mobile layout.
+
+- The four testing cards (`pages/materials-testing.html`) were a 2x2 grid on all
+  viewports; on phones that crushed the paragraphs into ~160px columns and made
+  the page enormously tall. Added a `≤768px` override that drops the grid to a
+  single column (and trims card padding / image height / justified text). The
+  override is placed *after* the base `.testing-*` rules in the inline
+  `<style>` — the existing mobile media block sits before them, so a rule added
+  there would have lost the cascade. Desktop stays 2x2.
+
 Product video double play button.
 
 - The Product Video poster on the Final Design page (`pages/final.html`) showed

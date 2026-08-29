@@ -208,6 +208,32 @@
       color: #444;
       font-size: 1.2rem;
     }
+
+    /* Mobile: stack the testing cards in a single column. The 2x2 grid crushed
+       the copy into narrow columns and stretched the page far too long. Placed
+       after the base rules above so it actually wins the cascade. */
+    @media (max-width: 768px) {
+      .testing-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+      }
+      .testing-section {
+        padding: 1.25rem;
+      }
+      .testing-image {
+        height: 220px;
+      }
+      .testing-content {
+        padding: 1.5rem 1rem;
+        min-height: 0;
+      }
+      .testing-content p {
+        font-size: 1rem;
+        text-align: left;
+        text-align-last: left;
+      }
+    }
   </style>
 </head>
 <body>
