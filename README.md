@@ -81,6 +81,12 @@ Materials Testing mobile layout.
   override is placed *after* the base `.testing-*` rules in the inline
   `<style>` — the existing mobile media block sits before them, so a rule added
   there would have lost the cascade. Desktop stays 2x2.
+- Same fix for the Iteration 2 cards (`pages/iteration2.html`): a mid-body inline
+  `<style>` set `.iteration-grid` to two columns with no breakpoint, which
+  overrode `iterationStyles.css`'s own `≤768px` collapse. Appended a `≤768px`
+  block to that inline style that forces one column and resets
+  `.wide-card { grid-column: auto }` (was `span 2`). Iterations 1/3/4 have no
+  inline override and were already fine.
 
 Product video double play button.
 

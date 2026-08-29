@@ -130,6 +130,26 @@
           display: block;
           height: auto;
         }
+
+        /* Mobile: stack all cards in a single column. This inline block loads
+           after iterationStyles.css and had no breakpoint, so its 2-column
+           rule was overriding the stylesheet's own mobile collapse. */
+        @media (max-width: 768px) {
+          .iteration-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+          }
+          .wide-card {
+            grid-column: auto;
+          }
+          .iteration-image {
+            height: 220px;
+          }
+          .wide-card .iteration-image {
+            max-width: 100%;
+          }
+        }
       </style>
 
       <div class="iteration-section">
