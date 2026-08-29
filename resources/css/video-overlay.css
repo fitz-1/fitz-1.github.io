@@ -78,13 +78,13 @@
 }
 
 @media (max-width: 768px) {
-  /* Stack the logo and the copy as one right-aligned group, vertically
-     centred in the hero, with consistent spacing between every element. */
+  /* Stack the logo and the copy as one right-aligned group pinned to the
+     top-right of the hero, just below the navbar, tightly spaced. */
   .video-overlay {
-    justify-content: center;
+    justify-content: flex-start;
     align-items: flex-end;
-    padding: 0 1.5rem;
-    gap: 1.5rem;
+    padding: 1.25rem 1.25rem 0;
+    gap: 0.5rem;
   }
 
   .overlay-logo {
@@ -100,7 +100,10 @@
     left: auto;
     transform: none;
     align-items: flex-end;
-    gap: 0.5rem;
+    gap: 0.35rem;
+    /* The logo PNG carries transparent padding at its base; pull the copy up
+       into it so the group reads as tightly spaced. */
+    margin-top: -0.85rem;
   }
 
   .overlay-text {
@@ -132,8 +135,8 @@
 
 @media (max-width: 480px) {
   .video-overlay {
-    gap: 1.25rem;
-    padding: 0 1.25rem;
+    gap: 0.4rem;
+    padding: 1rem 1rem 0;
   }
 
   .overlay-logo {

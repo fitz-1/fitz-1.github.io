@@ -27,11 +27,13 @@ Mobile hero spacing fixes.
 
 - Reworked the mobile hero overlay (`resources/css/video-overlay.css`, `≤768px`):
   the logo, "Brighter and Better." and "Revolutionizing the camping experience."
-  now flow as one right-aligned group inside the flex container with a consistent
-  `gap`, instead of each being absolutely positioned at ad-hoc offsets. The
-  subtext wraps normally again (was `white-space: nowrap`, which had forced it
-  down to `0.6rem`), and both lines use fluid `clamp()` sizes. Collapsed the
-  redundant 480px/414px overlay blocks.
+  now flow as one tight right-aligned group pinned to the top-right of the hero
+  just below the navbar (`justify-content: flex-start` + top padding, small
+  `gap`, and a negative `margin-top` on `.overlay-content` to eat the logo PNG's
+  transparent base padding), instead of each being absolutely positioned at
+  ad-hoc offsets. The subtext wraps normally again (was `white-space: nowrap`,
+  which had forced it down to `0.6rem`), and both lines use fluid `clamp()`
+  sizes. Collapsed the redundant 480px/414px overlay blocks.
 - `.hero` sizing changed from `100svh` to `calc(100svh - <navbar>)` in
   `resources/css/global.css` (including the `≤390px` block, which still had the
   old value) so the hero no longer overhangs the viewport bottom and pushes the
