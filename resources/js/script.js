@@ -100,8 +100,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const heroText = document.querySelector('.hero-text');
   if (!hero || !heroText) return;
 
-  const START_BOTTOM_RATIO = 0.04; // fraction of viewport height on load
-  const END_BOTTOM_PX = 24;        // resting gap from the bottom of the hero
+  const START_BOTTOM_RATIO = 0.01; // fraction of viewport height on load
+  const END_BOTTOM_PX = 0;         // slide flush to the bottom of the hero
 
   function update() {
     // How far the hero extends past the bottom of the visible viewport. On
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
     );
     const startPx = Math.max(
       window.innerHeight * START_BOTTOM_RATIO,
-      overhang + 12
+      overhang + 9
     );
 
     // Travel the full distance over the first ~10% of a viewport of scrolling.

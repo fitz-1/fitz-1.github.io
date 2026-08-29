@@ -56,7 +56,7 @@
   position: absolute;
   /* Starts higher so the heading is readable on load, then slides down to
      the bottom of the hero as the user scrolls (see script.js). */
-  bottom: 9vh;
+  bottom: 1vh;
   left: .5rem;
   right: .5rem;
   color: white !important;

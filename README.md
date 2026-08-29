@@ -54,6 +54,8 @@ Home-page hero heading.
 - Sized the hero as `calc(100svh - <navbar>)` in `resources/css/global.css` so
   it fills exactly the space below the fixed navbar instead of overhanging the
   viewport bottom and pushing the heading up on load.
+- Its scroll end point is flush with the bottom of the hero (`END_BOTTOM_PX = 0`
+  in `resources/js/script.js`) — no bottom gap once fully scrolled.
 
 Shorter navbar.
 
@@ -69,6 +71,13 @@ Mobile photo gallery.
   full-width photo per row, roughly halving the scroll length. Updated the
   `≤768px` / `≤480px` breakpoints in `index.html`'s inline styles and
   `resources/css/global.css`.
+
+Product video double play button.
+
+- The Product Video poster on the Final Design page (`pages/final.html`) showed
+  two ▶ triangles: the `.play-button` div had a literal `▶` in its markup *and* a
+  `.play-button::after { content: "▶" }` rule. Removed the literal character and
+  kept the pseudo-element (it has the optical-centering `margin-left`).
 
 Slideshow auto-scroll fix.
 
