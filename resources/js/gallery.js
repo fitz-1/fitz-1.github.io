@@ -4,6 +4,7 @@ class Gallery {
     this.currentSlide = 0;
     this.currentThumbnailPage = 0;
     this.autoScrollInterval = null;
+    this.resumeTimeout = null;
     this.thumbnailsPerPage = 12;
     
     // Initialize elements
@@ -27,12 +28,27 @@ class Gallery {
   }
 
   startAutoScroll() {
+    // Always tear down any existing timers first so we never end up with more
+    // than one interval running. Leaked intervals were what caused the gallery
+    // to flip through slides uncontrollably.
+    this.stopAutoScroll();
     this.autoScrollInterval = setInterval(() => this.nextSlide(), 5000);
   }
 
+  stopAutoScroll() {
+    if (this.autoScrollInterval) {
+      clearInterval(this.autoScrollInterval);
+      this.autoScrollInterval = null;
+    }
+    if (this.resumeTimeout) {
+      clearTimeout(this.resumeTimeout);
+      this.resumeTimeout = null;
+    }
+  }
+
   pauseAutoScroll() {
-    clearInterval(this.autoScrollInterval);
-    setTimeout(() => this.startAutoScroll(), 15000); // Resume after 15 seconds
+    this.stopAutoScroll();
+    this.resumeTimeout = setTimeout(() => this.startAutoScroll(), 15000); // Resume after 15 seconds
   }
 
   createThumbnails() {
@@ -110,13 +126,11 @@ class Gallery {
   nextSlide() {
     this.currentSlide = (this.currentSlide + 1) % this.slides.length;
     this.showSlide(this.currentSlide);
-    this.pauseAutoScroll();
   }
 
   prevSlide() {
     this.currentSlide = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
     this.showSlide(this.currentSlide);
-    this.pauseAutoScroll();
   }
 
   addEventListeners() {
@@ -124,8 +138,8 @@ class Gallery {
     const prevBtn = this.container.querySelector('.slideshow-controls:first-child');
     const nextBtn = this.container.querySelector('.slideshow-controls:last-child');
     
-    prevBtn.onclick = () => this.prevSlide();
-    nextBtn.onclick = () => this.nextSlide();
+    prevBtn.onclick = () => { this.prevSlide(); this.pauseAutoScroll(); };
+    nextBtn.onclick = () => { this.nextSlide(); this.pauseAutoScroll(); };
     
     // Add event listeners for thumbnail pagination
     this.prevThumbPageBtn.onclick = () => this.prevThumbnailPage();

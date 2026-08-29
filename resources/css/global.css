@@ -46,8 +46,11 @@ a {
 /* Hero Section */
 .hero {
     position: relative;
-    height: 100vh;
-    height: 100svh; /* keep the hero (and its heading) within the visible area on mobile */
+    /* Subtract the fixed navbar so the hero fills exactly the space below it
+       and doesn't overhang the bottom of the viewport (which was pushing the
+       heading up on load). */
+    height: calc(100vh - 56px);
+    height: calc(100svh - 56px);
     overflow: hidden;
     margin-top: 56px; /* Adjust for fixed navbar */
 }
@@ -176,6 +179,50 @@ footer {
     background-color: #f0f0f0;
 }
 
+/* Lightbox (click-to-enlarge) */
+.lightbox-trigger {
+    cursor: zoom-in;
+}
+
+.lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4vmin;
+    background-color: rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+    cursor: zoom-out;
+}
+
+.lightbox-overlay.open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.25s ease;
+}
+
+.lightbox-media {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    transform: scale(0.9);
+    transition: transform 0.25s ease;
+}
+
+.lightbox-overlay.open .lightbox-media {
+    transform: scale(1);
+}
+
+body.lightbox-active {
+    overflow: hidden;
+}
+
 /* Page Content */
 .page-content {
     padding-top: 80px;
@@ -194,6 +241,12 @@ footer {
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: auto;
     }
+
+    .hero {
+        margin-top: 46px; /* match the shorter mobile navbar */
+        height: calc(100vh - 46px);
+        height: calc(100svh - 46px);
+    }
 }
 
 @media (max-width: 480px) {
@@ -204,8 +257,8 @@ footer {
 
 @media (max-width: 390px) {
     .hero {
-        height: 100vh;
-        height: 100svh;
+        height: calc(100vh - 46px);
+        height: calc(100svh - 46px);
         width: 100%;
     }
 }

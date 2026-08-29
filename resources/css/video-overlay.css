@@ -78,25 +78,46 @@
 }
 
 @media (max-width: 768px) {
-  .overlay-content {
-    right: 1rem;
-    top: 30%;
+  /* Stack the logo and the copy as one right-aligned group, vertically
+     centred in the hero, with consistent spacing between every element. */
+  .video-overlay {
+    justify-content: center;
+    align-items: flex-end;
+    padding: 0 1.5rem;
+    gap: 1.5rem;
   }
-  
-  .overlay-header {
-    font-size: 2rem;
-  }
-  
-  .overlay-subtext {
-    font-size: 1rem;
-  }
-  
+
   .overlay-logo {
-    width: min(150px, 20vw);
-    top: 1.5rem;
-    right: 1.5rem;
+    position: static;
+    width: min(150px, 34vw);
+    margin: 0;
   }
-  
+
+  .overlay-content {
+    position: static;
+    top: auto;
+    right: auto;
+    left: auto;
+    transform: none;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+
+  .overlay-text {
+    margin: 0;
+  }
+
+  .overlay-header {
+    font-size: clamp(1.45rem, 6vw, 2rem);
+    margin: 0;
+  }
+
+  .overlay-subtext {
+    font-size: clamp(0.9rem, 3.6vw, 1.1rem);
+    white-space: normal;
+    max-width: 62vw;
+  }
+
   .hero-text {
     font-size: 1.2rem;
     bottom: 1.5rem;
@@ -110,27 +131,19 @@
 }
 
 @media (max-width: 480px) {
-  .overlay-content {
-    right: 1rem;
-    left: auto;
-    top: 20%;
-    text-align: right;
+  .video-overlay {
+    gap: 1.25rem;
+    padding: 0 1.25rem;
   }
-  
+
   .overlay-logo {
-    width: min(120px, 25vw);
-    top: 1rem;
-    right: 1rem;
+    width: min(130px, 32vw);
   }
-  
-  .overlay-header {
-    font-size: 1.5rem;
-  }
-  
+
   .overlay-subtext {
-    font-size: 0.8rem;
+    max-width: 70vw;
   }
-  
+
   .hero-text {
     font-size: 1rem;
     bottom: 1rem;
@@ -145,27 +158,9 @@
 
 /* iPhone-specific adjustments */
 @media (max-width: 414px) {
-  .overlay-content {
-    top: 20%;
-    right: 1rem;
-    left: auto;
-  }
-  
-  .overlay-header {
-    font-size: 1.2rem;
-  }
-
-  .overlay-subtext {
-    font-size: 0.6rem;
-  }
-
-  .overlay-logo {
-    width: 120px;
-  }
-  
   .hero-text {
     bottom: 10%;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
 
   /* iPhone video optimizations */
@@ -173,4 +168,4 @@
     transform: scale(1); /* Maximum zoom for iPhone */
     filter: brightness(1);
   }
-} 
+}

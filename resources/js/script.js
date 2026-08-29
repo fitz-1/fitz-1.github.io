@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const heroText = document.querySelector('.hero-text');
   if (!hero || !heroText) return;
 
-  const START_BOTTOM_RATIO = 0.09; // fraction of viewport height on load
+  const START_BOTTOM_RATIO = 0.04; // fraction of viewport height on load
   const END_BOTTOM_PX = 24;        // resting gap from the bottom of the hero
 
   function update() {
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
     );
     const startPx = Math.max(
       window.innerHeight * START_BOTTOM_RATIO,
-      overhang + heroText.offsetHeight * 0.35 + 16
+      overhang + 12
     );
 
     // Travel the full distance over the first ~10% of a viewport of scrolling.
