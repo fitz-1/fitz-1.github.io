@@ -47,8 +47,9 @@ a {
 .hero {
     position: relative;
     height: 100vh;
+    height: 100svh; /* keep the hero (and its heading) within the visible area on mobile */
     overflow: hidden;
-    margin-top: 64px; /* Adjust for fixed navbar */
+    margin-top: 56px; /* Adjust for fixed navbar */
 }
 
 #bg-video {
@@ -190,7 +191,7 @@ footer {
 
 @media (max-width: 768px) {
     .photo-gallery {
-        grid-template-columns: repeat(1, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         grid-template-rows: auto;
     }
 }
@@ -204,6 +205,7 @@ footer {
 @media (max-width: 390px) {
     .hero {
         height: 100vh;
+        height: 100svh;
         width: 100%;
     }
 }

@@ -1,7 +1,7 @@
 /* Basic Navbar Styles */
 .navbar {
     background-color: #fff;
-    padding: 1rem;
+    padding: 0.4rem 1rem;
     position: fixed;
     top: 0;
     left: 0;
@@ -23,7 +23,7 @@
 }
 
 .nav-logo {
-    height: 50px;
+    height: 42px;
     width: auto;
     display: flex;
     align-items: center;

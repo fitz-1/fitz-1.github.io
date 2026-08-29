@@ -91,4 +91,40 @@ document.addEventListener('DOMContentLoaded', function() {
       observer.observe(video);
     });
   }
-}); 
+});
+
+// Hero heading: readable on load, slides to the bottom of the hero as the
+// user scrolls so it stops covering the imagery behind it.
+document.addEventListener('DOMContentLoaded', function () {
+  const hero = document.querySelector('.hero');
+  const heroText = document.querySelector('.hero-text');
+  if (!hero || !heroText) return;
+
+  const START_BOTTOM_RATIO = 0.09; // fraction of viewport height on load
+  const END_BOTTOM_PX = 24;        // resting gap from the bottom of the hero
+
+  function update() {
+    // How far the hero extends past the bottom of the visible viewport. On
+    // mobile the address bar makes this non-zero, so the start position has to
+    // clear it or the last line of the heading sits below the fold.
+    const overhang = Math.max(
+      hero.offsetTop + hero.offsetHeight - window.innerHeight,
+      0
+    );
+    const startPx = Math.max(
+      window.innerHeight * START_BOTTOM_RATIO,
+      overhang + heroText.offsetHeight * 0.35 + 16
+    );
+
+    // Travel the full distance over the first ~10% of a viewport of scrolling.
+    const range = Math.max(window.innerHeight * 0.1, 1);
+    const progress = Math.min(Math.max(window.scrollY / range, 0), 1);
+
+    const bottom = startPx + (END_BOTTOM_PX - startPx) * progress;
+    heroText.style.bottom = bottom + 'px';
+  }
+
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+});
